@@ -19,7 +19,7 @@ export default function SiteHeader() {
         <nav className="header-nav" aria-label="Main navigation">
           <Link href="/blog">Blog</Link>
           <a href="https://www.labaribooks.com/" target="_blank" rel="noreferrer">
-            Visit Labari
+            Home
           </a>
         </nav>
       </div>
