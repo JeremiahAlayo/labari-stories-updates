@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export default function SiteHeader() {
@@ -8,9 +9,14 @@ export default function SiteHeader() {
       </a>
       <div className="container header-inner">
         <Link className="brand" href="/blog" aria-label="Labari home">
-          <span className="brand-mark" aria-hidden="true">
-            L
-          </span>
+          <Image
+            className="brand-logo"
+            src="/labari-logo.jpeg"
+            alt=""
+            width="48"
+            height="48"
+            aria-hidden="true"
+          />
           <span>
             <strong>Labari</strong>
             <small>Stories & Updates</small>
