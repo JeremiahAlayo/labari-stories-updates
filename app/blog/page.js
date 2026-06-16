@@ -7,7 +7,7 @@ import { getCategoriesWithCounts, getPublishedPosts } from "@/utils/posts";
 export const metadata = {
   title: "Blog",
   description:
-    "Explore Labari updates, educational posts, platform announcements, tutorials, and guides.",
+    "Explore Labari product updates, reading guides, book discovery articles, feature guides, and platform education.",
   alternates: {
     canonical: "/blog"
   }
@@ -27,9 +27,9 @@ export default function BlogPage() {
               <p className="eyebrow">Stories & Updates</p>
               <h1>Read the latest from Labari.</h1>
               <p className="hero-text">
-                Explore platform news, reading guides, tutorials, and useful
-                articles about experiencing books through text, audio, and
-                visual storytelling.
+                Explore product news, reading guides, book discovery articles,
+                feature explainers, and practical tips for getting more from
+                Labari.
               </p>
             </div>
             <aside className="hero-panel" aria-label="Blog summary">
@@ -43,7 +43,7 @@ export default function BlogPage() {
               </div>
               <div>
                 <span className="panel-kicker">Focus</span>
-                <strong>Books, learning, and product news</strong>
+                <strong>Discovery, library, dashboard, and reading tools</strong>
               </div>
             </aside>
           </div>

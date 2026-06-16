@@ -69,6 +69,8 @@ Post shape:
   description: "Short SEO-friendly description",
   date: "2026-06-12",
   category: "Announcements",
+  platformArea: "Home",
+  audience: "All readers",
   readTime: "4 min read",
   status: "published",
   imageTone: "green",
@@ -83,7 +85,18 @@ Post shape:
 
 Only posts with `status: "published"` appear on the public blog.
 
-The `/admin` page provides a simple editorial workspace using browser local storage. It is useful for testing the content flow and can later be connected to an API, CMS, or database.
+The `/admin` page provides a simple editorial workspace using browser local storage. Editors can manage title, slug, SEO description, category, platform area, audience, publish status, date, reading time, visual tone, and full article sections. The same structure can later be connected to an API, CMS, or database.
+
+Recommended platform areas include:
+
+- Home
+- Browse
+- Dashboard
+- Library
+- Book Pages
+- Authors
+- Account & Billing
+- Recommendations
 
 ## SEO
 

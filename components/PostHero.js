@@ -11,6 +11,7 @@ export default function PostHero({ post }) {
           <div className="post-meta large">
             <span>{formatDate(post.date)}</span>
             <span>{post.readTime}</span>
+            {post.platformArea ? <span>{post.platformArea}</span> : null}
           </div>
         </div>
         <div

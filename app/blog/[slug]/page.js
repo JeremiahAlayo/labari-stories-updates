@@ -71,6 +71,18 @@ export default async function BlogPostPage({ params }) {
               <span>Reading time</span>
               <strong>{post.readTime}</strong>
             </div>
+            {post.platformArea ? (
+              <div className="aside-card">
+                <span>Platform area</span>
+                <strong>{post.platformArea}</strong>
+              </div>
+            ) : null}
+            {post.audience ? (
+              <div className="aside-card">
+                <span>Audience</span>
+                <strong>{post.audience}</strong>
+              </div>
+            ) : null}
             <Link className="secondary-link" href="/blog">
               Back to all posts
             </Link>

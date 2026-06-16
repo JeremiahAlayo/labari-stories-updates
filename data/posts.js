@@ -3,144 +3,156 @@ export const posts = [
     title: "Introducing Labari: Every Book, Your Way",
     slug: "introducing-labari-every-book-your-way",
     description:
-      "A first look at Labari's mission to bring books to readers through text, audio, and visual storytelling.",
+      "A first look at Labari's reading, listening, and visual storytelling experience for African stories and global books.",
     date: "2026-06-12",
     category: "Announcements",
+    platformArea: "Home",
+    audience: "All readers",
     readTime: "4 min read",
     status: "published",
     imageTone: "green",
     content: [
       {
-        heading: "A new way to experience books",
+        heading: "A platform built around choice",
         paragraphs: [
-          "Labari is being designed as a multi-format book platform where users can read, listen, or watch stories depending on their context and preference.",
-          "The platform brings together classic works, African literature, educational content, and family-friendly storytelling in one consistent experience."
+          "Labari brings books into one experience where readers can discover stories, start reading, listen with text-to-speech where available, and follow their progress across devices.",
+          "The goal is simple: make books easier to begin, easier to continue, and more enjoyable for different reading habits."
         ]
       },
       {
-        heading: "Why multi-format matters",
+        heading: "What readers can expect",
         paragraphs: [
-          "A reader may want text during study time, audio while commuting, and visual storytelling when sharing books with children.",
-          "Labari's goal is to make those transitions feel natural while keeping the book experience simple, accessible, and memorable."
+          "The platform includes featured books, recently added titles, author pages, personal libraries, reading insights, achievements, and recommendations.",
+          "As Labari grows, stories and updates will help readers understand new features, discover books, and get more value from the platform."
         ]
       }
     ]
   },
   {
-    title: "How Labari Helps Families Build Better Reading Habits",
-    slug: "how-labari-helps-families-build-better-reading-habits",
+    title: "How to Use Your Labari Library",
+    slug: "how-to-use-your-labari-library",
     description:
-      "Practical ways families can use profiles, curated content, and offline access to make reading part of everyday life.",
+      "Learn how the Library helps readers manage books, track progress, find favorites, and return to stories they care about.",
     date: "2026-06-08",
-    category: "User Guides",
+    category: "Reading Guides",
+    platformArea: "Library",
+    audience: "Readers",
     readTime: "5 min read",
     status: "published",
     imageTone: "blue",
     content: [
       {
-        heading: "Make reading easier to start",
+        heading: "A home for your books",
         paragraphs: [
-          "Good reading habits are easier to build when the next book is easy to find and available on the device already in use.",
-          "Labari's planned profiles and content collections can help parents create a calmer reading environment for children and teens."
+          "The Library keeps a reader's books, favorites, completion progress, and reading activity in one place.",
+          "This makes it easier to continue a book, revisit completed titles, and build a consistent reading habit over time."
         ]
       },
       {
-        heading: "Use formats for different moments",
+        heading: "Useful ways to organize reading",
         paragraphs: [
-          "Text supports focused study, audio supports movement, and visual stories can introduce younger readers to new ideas.",
-          "The strongest habit is not tied to one format. It is tied to making stories available when people are ready for them."
+          "Readers can use library filters such as all books, currently reading, completed, and favorites to quickly find what they need.",
+          "Blog articles can support this experience with guides about managing progress, saving books, and choosing what to read next."
         ]
       }
     ]
   },
   {
-    title: "Preparing SEO-Friendly Educational Articles for Labari",
-    slug: "preparing-seo-friendly-educational-articles-for-labari",
+    title: "Discovering Books Through Browse and Recommendations",
+    slug: "discovering-books-through-browse-and-recommendations",
     description:
-      "A simple editorial checklist for writing articles that are helpful to users and easy for search engines to understand.",
+      "A guide to finding featured books, recently added titles, recommendations, authors, and categories across Labari.",
     date: "2026-06-03",
-    category: "Tutorials",
-    readTime: "6 min read",
+    category: "Book Discovery",
+    platformArea: "Browse",
+    audience: "Readers",
+    readTime: "4 min read",
     status: "published",
     imageTone: "amber",
     content: [
       {
-        heading: "Start with user intent",
+        heading: "Start with the shelves",
         paragraphs: [
-          "A useful article answers a specific question. Before writing, define what the reader wants to understand and what action they should be able to take afterward.",
-          "For Labari, strong topics include how multi-format reading works, how parents can choose content, and how offline access supports learning."
+          "Labari highlights featured books and recently added titles so readers can quickly see what is new or worth exploring.",
+          "Book cards can show availability, authors, ratings, and coming-soon labels, helping readers decide where to begin."
         ]
       },
       {
-        heading: "Keep structure clear",
+        heading: "Make discovery feel guided",
         paragraphs: [
-          "Use readable slugs, concise titles, accurate descriptions, and headings that make the article easy to scan.",
-          "The publishing structure supports clean titles, descriptions, canonical URLs, and article-specific Open Graph data."
+          "The blog can support discovery with reading lists, author spotlights, category explainers, and posts that introduce new collections.",
+          "This gives users more context before they open a book detail page or add a title to their Library."
         ]
       }
     ]
   },
   {
-    title: "Platform Notes: Building for Read, Listen, and Watch",
-    slug: "platform-notes-building-for-read-listen-and-watch",
+    title: "Reading Experience: TTS, Bookmarks, and Sync",
+    slug: "reading-experience-tts-bookmarks-and-sync",
     description:
-      "Design considerations behind a consistent experience for reading, listening, and watching across devices.",
+      "Understand the reading tools designed to make Labari books easier to continue across time and devices.",
     date: "2026-05-29",
-    category: "Platform Updates",
-    readTime: "4 min read",
+    category: "Feature Guides",
+    platformArea: "Book Pages",
+    audience: "Readers",
+    readTime: "5 min read",
     status: "published",
     imageTone: "violet",
     content: [
       {
-        heading: "One platform, multiple modes",
+        heading: "Tools that support the reader",
         paragraphs: [
-          "A multi-format platform needs clear navigation, predictable controls, and content pages that do not feel different every time the format changes.",
-          "The same principle guides this publishing experience: data, layout, and routes are separated so the code stays easy to maintain."
+          "Book pages can surface practical reading tools such as custom typography, text-to-speech, bookmarks, and sync across devices.",
+          "Each feature supports a different reader need, from comfort and accessibility to continuity and focus."
         ]
       },
       {
-        heading: "Keep the interface focused",
+        heading: "Why feature education matters",
         paragraphs: [
-          "Labari's public pages use a dark, refined style with green and blue accents. The article experience follows that direction while keeping long-form reading comfortable.",
-          "The result is a blog area that feels connected to the platform without pretending to be the full product."
+          "A reader may not use a helpful tool if they do not understand it exists or why it matters.",
+          "Short feature guides can teach users how to get more from the platform without making the app interface feel crowded."
         ]
       }
     ]
   },
   {
-    title: "What to Expect From the Labari Waitlist",
-    slug: "what-to-expect-from-the-labari-waitlist",
+    title: "Using the Dashboard to Build a Reading Habit",
+    slug: "using-the-dashboard-to-build-a-reading-habit",
     description:
-      "An overview of the kind of launch updates, early access notes, and product news waitlist members can expect.",
+      "How Labari's dashboard can help readers follow goals, reading time, streaks, achievements, and personalized insights.",
     date: "2026-05-21",
-    category: "General Articles",
-    readTime: "3 min read",
+    category: "Platform Updates",
+    platformArea: "Dashboard",
+    audience: "Returning readers",
+    readTime: "4 min read",
     status: "published",
     imageTone: "slate",
     content: [
       {
-        heading: "Useful updates, not noise",
+        heading: "Turn activity into motivation",
         paragraphs: [
-          "A good waitlist should help people understand what is coming and why it matters.",
-          "Labari can use blog posts to explain new features, share educational content, and prepare early users for the platform experience."
+          "The dashboard gives readers a snapshot of books in their Library, time read, streaks, completed books, recommended titles, and weekly goals.",
+          "This turns reading into a visible journey instead of a hidden activity."
         ]
       },
       {
-        heading: "A place for product context",
+        heading: "Content that supports retention",
         paragraphs: [
-          "Announcements can be short, but articles give the team room to explain the thinking behind major features and content decisions.",
-          "That context helps users trust the platform before they even create an account."
+          "Blog posts can explain achievements, reading goals, insights, and recommendations so users understand how to keep momentum.",
+          "This kind of content is useful for onboarding, retention, and product education."
         ]
       }
     ]
   },
   {
-    title: "Draft: Author Spotlight Workflow",
-    slug: "draft-author-spotlight-workflow",
+    title: "Draft: Author Spotlight Publishing Workflow",
+    slug: "draft-author-spotlight-publishing-workflow",
     description:
-      "A draft example showing how unpublished posts can remain private until they are ready.",
+      "A draft example for author spotlight content before publication.",
     date: "2026-05-10",
-    category: "Platform Updates",
+    category: "Author Spotlights",
+    platformArea: "Authors",
+    audience: "Editorial team",
     readTime: "3 min read",
     status: "draft",
     imageTone: "green",

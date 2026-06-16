@@ -14,6 +14,7 @@ export default function BlogCard({ post }) {
       <div className="card-content">
         <div className="post-meta">
           <span>{post.category}</span>
+          {post.platformArea ? <span>{post.platformArea}</span> : null}
           <span>{formatDate(post.date)}</span>
         </div>
         <h2>

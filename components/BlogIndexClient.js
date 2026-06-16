@@ -13,7 +13,7 @@ export default function BlogIndexClient({ posts, categories }) {
     return posts.filter((post) => {
       const matchesCategory =
         activeCategory === "All" || post.category === activeCategory;
-      const searchableText = `${post.title} ${post.description} ${post.category}`
+      const searchableText = `${post.title} ${post.description} ${post.category} ${post.platformArea || ""} ${post.audience || ""}`
         .toLowerCase()
         .trim();
       const matchesQuery =
