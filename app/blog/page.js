@@ -25,7 +25,9 @@ export default function BlogPage() {
           <div className="container hero-grid">
             <div className="hero-copy">
               <p className="eyebrow">Stories & Updates</p>
-              <h1>Read the latest from Labari.</h1>
+              <h1>
+                Read the latest from <span className="gradient-text">Labari.</span>
+              </h1>
               <p className="hero-text">
                 Explore product news, reading guides, book discovery articles,
                 feature explainers, and practical tips for getting more from

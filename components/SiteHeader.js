@@ -13,14 +13,12 @@ export default function SiteHeader() {
             className="brand-logo"
             src="/labari-logo-main.png"
             alt=""
-            width="48"
-            height="48"
+            width="80"
+            height="80"
             aria-hidden="true"
+            priority
           />
-          <span>
-            <strong>Labari</strong>
-            <small>Stories & Updates</small>
-          </span>
+          <span className="brand-context">Stories & Updates</span>
         </Link>
         <nav className="header-nav" aria-label="Main navigation">
           <Link href="/blog">Blog</Link>

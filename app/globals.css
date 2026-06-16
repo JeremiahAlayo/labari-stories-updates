@@ -18,6 +18,11 @@ body {
   letter-spacing: 0;
 }
 
+::selection {
+  background: rgba(34, 197, 94, 0.35);
+  color: white;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -60,9 +65,10 @@ button {
   position: sticky;
   top: 0;
   z-index: 20;
-  border-bottom: 1px solid var(--color-border);
-  background: rgba(3, 7, 6, 0.86);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(0, 0, 0, 0.82);
   backdrop-filter: blur(16px);
+  animation: slide-down 420ms ease both;
 }
 
 .header-inner {
@@ -76,27 +82,20 @@ button {
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .brand-logo {
-  width: 48px;
-  height: 48px;
+  width: 72px;
+  height: 72px;
   display: block;
-  border: 1px solid rgba(34, 197, 94, 0.45);
-  border-radius: 8px;
-  object-fit: cover;
-  box-shadow: 0 10px 28px rgba(34, 197, 94, 0.12);
+  object-fit: contain;
 }
 
-.brand strong,
-.brand small {
-  display: block;
-}
-
-.brand small {
+.brand-context {
   color: var(--color-muted);
-  margin-top: 2px;
+  font-size: 0.86rem;
+  font-weight: 500;
 }
 
 .header-nav {
@@ -107,29 +106,72 @@ button {
 
 .header-nav a {
   min-height: 40px;
+  position: relative;
   display: inline-flex;
   align-items: center;
-  border-radius: 8px;
-  padding: 0 14px;
+  padding: 0 12px;
   color: var(--color-muted);
+  transition: color 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .header-nav a:hover {
-  background: var(--color-surface);
   color: var(--color-text);
+}
+
+.header-nav a::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 4px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--gradient-brand);
+  opacity: 0;
+  transform: scaleX(0.55);
+  transition:
+    opacity 200ms ease,
+    transform 200ms ease;
+}
+
+.header-nav a:hover::after {
+  opacity: 1;
+  transform: scaleX(1);
 }
 
 .blog-hero,
 .post-hero {
-  border-bottom: 1px solid var(--color-border);
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   background:
-    linear-gradient(135deg, rgba(34, 197, 94, 0.12), transparent 38%),
-    radial-gradient(circle at 75% 10%, rgba(59, 130, 246, 0.18), transparent 32%),
+    linear-gradient(135deg, rgba(22, 163, 74, 0.18), transparent 42%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.45), rgba(59, 130, 246, 0.1)),
     var(--color-bg);
+}
+
+.blog-hero::before,
+.post-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.12)),
+    repeating-linear-gradient(
+      112deg,
+      rgba(255, 255, 255, 0.025) 0,
+      rgba(255, 255, 255, 0.025) 1px,
+      transparent 1px,
+      transparent 72px
+    );
+  opacity: 0.55;
 }
 
 .hero-grid,
 .post-hero-grid {
+  position: relative;
+  z-index: 1;
   min-height: 420px;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 360px;
@@ -140,6 +182,7 @@ button {
 
 .hero-copy {
   max-width: 760px;
+  animation: fade-up 560ms ease both;
 }
 
 .eyebrow {
@@ -164,6 +207,13 @@ h1 {
   line-height: 1.05;
 }
 
+.gradient-text {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
 h2 {
   font-size: 1.6rem;
   line-height: 1.2;
@@ -179,19 +229,20 @@ h2 {
 .hero-panel {
   display: grid;
   gap: 12px;
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 8px;
   padding: 18px;
-  background: rgba(10, 15, 13, 0.8);
+  background: rgba(255, 255, 255, 0.03);
   box-shadow: var(--shadow-soft);
+  animation: fade-up 640ms ease 120ms both;
 }
 
 .hero-panel div,
 .aside-card {
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 8px;
   padding: 16px;
-  background: var(--color-surface);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .panel-kicker,
@@ -262,11 +313,17 @@ h2 {
 .primary-button,
 .danger-button {
   min-height: 42px;
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   background: var(--color-surface);
   color: var(--color-text);
   padding: 0 14px;
+  transition:
+    background 300ms ease,
+    border-color 300ms ease,
+    box-shadow 300ms ease,
+    color 300ms ease,
+    transform 300ms ease;
 }
 
 .category-pills button {
@@ -289,9 +346,25 @@ h2 {
 .category-pills button.active,
 .primary-button {
   border-color: transparent;
-  background: linear-gradient(135deg, var(--color-green), var(--color-green-2));
+  background: var(--gradient-action);
   color: white;
-  box-shadow: 0 12px 28px rgba(34, 197, 94, 0.18);
+  box-shadow: var(--shadow-green);
+}
+
+.category-pills button:hover,
+.admin-list-header button:hover,
+.content-builder-header button:hover,
+.small-button:hover,
+.primary-button:hover {
+  transform: translateY(-1px);
+}
+
+.primary-button:hover,
+.category-pills button.active:hover {
+  background: var(--gradient-action-hover);
+  box-shadow:
+    0 10px 15px -3px rgba(34, 197, 94, 0.4),
+    0 4px 6px -4px rgba(34, 197, 94, 0.4);
 }
 
 .post-grid {
@@ -302,10 +375,23 @@ h2 {
 
 .blog-card {
   overflow: hidden;
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 8px;
-  background: var(--color-panel);
+  background: rgba(255, 255, 255, 0.03);
   box-shadow: var(--shadow-soft);
+  animation: fade-up 520ms ease both;
+  transition:
+    border-color 300ms ease,
+    box-shadow 300ms ease,
+    transform 300ms ease;
+}
+
+.blog-card:hover {
+  border-color: rgba(34, 197, 94, 0.3);
+  box-shadow:
+    var(--shadow-soft),
+    0 10px 28px rgba(34, 197, 94, 0.12);
+  transform: translateY(-4px);
 }
 
 .image-placeholder {
@@ -316,6 +402,11 @@ h2 {
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0)),
     var(--tone);
+  transition: transform 500ms ease;
+}
+
+.blog-card:hover .image-placeholder {
+  transform: scale(1.02);
 }
 
 .image-placeholder span {
@@ -411,8 +502,9 @@ h2 {
 
 .post-hero-image {
   min-height: 320px;
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 8px;
+  animation: float-soft 6800ms ease-in-out infinite;
 }
 
 .article-layout {
@@ -470,9 +562,9 @@ h2 {
 
 .admin-list,
 .admin-editor {
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 8px;
-  background: var(--color-panel);
+  background: rgba(255, 255, 255, 0.03);
   padding: 18px;
 }
 
@@ -654,7 +746,7 @@ h2 {
 }
 
 .site-footer {
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
   background: #020403;
 }
 
@@ -717,15 +809,11 @@ h2 {
   }
 
   .brand-logo {
-    width: 40px;
-    height: 40px;
+    width: 48px;
+    height: 48px;
   }
 
-  .brand strong {
-    font-size: 0.95rem;
-  }
-
-  .brand small {
+  .brand-context {
     display: none;
   }
 
@@ -788,5 +876,51 @@ h2 {
     align-items: flex-start;
     flex-direction: column;
     padding: 22px 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
   }
 }
