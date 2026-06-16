@@ -14,6 +14,7 @@ This project provides a polished publishing area for Labari with:
 - SEO metadata
 - Sample posts for layout testing
 - A lightweight editorial workspace at `/admin`
+- Browser text-to-speech controls on article pages
 
 The code is organized so it can be reviewed, maintained, and connected to a production content source later without changing the public user experience.
 
@@ -58,6 +59,12 @@ npm start
 
 ## Managing Posts
 
+Open the admin workspace at:
+
+```text
+http://localhost:3000/admin
+```
+
 Sample posts live in `data/posts.js`.
 
 Post shape:
@@ -71,6 +78,12 @@ Post shape:
   category: "Announcements",
   platformArea: "Home",
   audience: "All readers",
+  authorId: "labari-editorial",
+  authorName: "Labari Editorial",
+  submittedBy: "Social Media Team",
+  approvalStatus: "submitted",
+  finalApprover: "Head of Social Media",
+  socialChannel: "Website, Instagram",
   readTime: "4 min read",
   status: "published",
   imageTone: "green",
@@ -85,7 +98,15 @@ Post shape:
 
 Only posts with `status: "published"` appear on the public blog.
 
-The `/admin` page provides a simple editorial workspace using browser local storage. Editors can manage title, slug, SEO description, category, platform area, audience, publish status, date, reading time, visual tone, and full article sections. The same structure can later be connected to an API, CMS, or database.
+The `/admin` page provides a simple editorial workspace using browser local storage. Editors can manage title, slug, SEO description, category, platform area, audience, authors, social captions, publish status, approval status, final approver, reviewer notes, date, reading time, visual tone, and full article sections. The same structure can later be connected to an API, CMS, or database.
+
+Suggested editorial flow:
+
+1. Social media team creates or edits a draft.
+2. The post is marked as `submitted`.
+3. Head of Social Media reviews notes, caption, and article body.
+4. If approved, approval status becomes `approved`.
+5. Only approved posts should be moved to public `published` status.
 
 Recommended platform areas include:
 

@@ -3,7 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { createSlug } from "@/utils/slug";
 
-const storageKey = "labari-blog-admin-posts-v2";
+const postsStorageKey = "labari-blog-admin-posts-v3";
+const authorsStorageKey = "labari-blog-authors-v1";
 
 const categoryOptions = [
   "Announcements",
@@ -35,7 +36,14 @@ const audienceOptions = [
   "Editorial team"
 ];
 
+const approvalOptions = ["draft", "submitted", "needs changes", "approved"];
 const toneOptions = ["green", "blue", "amber", "violet", "slate"];
+
+const emptyAuthor = {
+  name: "",
+  role: "Contributor",
+  bio: ""
+};
 
 const emptyPost = {
   title: "",
@@ -44,6 +52,14 @@ const emptyPost = {
   category: "Reading Guides",
   platformArea: "Library",
   audience: "All readers",
+  authorId: "labari-editorial",
+  authorName: "Labari Editorial",
+  submittedBy: "Social Media Team",
+  approvalStatus: "draft",
+  finalApprover: "Head of Social Media",
+  reviewerNotes: "",
+  socialChannel: "Website",
+  socialCopy: "",
   status: "draft",
   date: "",
   readTime: "3 min read",
@@ -71,40 +87,68 @@ function normalizePost(post) {
   };
 }
 
-export default function AdminDashboard({ initialPosts }) {
+function normalizeAuthor(author) {
+  return {
+    id: author.id || createSlug(author.name),
+    name: author.name,
+    role: author.role || "Contributor",
+    bio: author.bio || ""
+  };
+}
+
+export default function AdminDashboard({ initialPosts, initialAuthors }) {
   const normalizedInitialPosts = useMemo(
     () => initialPosts.map((post) => normalizePost(post)),
     [initialPosts]
   );
+  const normalizedInitialAuthors = useMemo(
+    () => initialAuthors.map((author) => normalizeAuthor(author)),
+    [initialAuthors]
+  );
+
   const [posts, setPosts] = useState(normalizedInitialPosts);
+  const [authors, setAuthors] = useState(normalizedInitialAuthors);
+  const [authorDraft, setAuthorDraft] = useState(emptyAuthor);
   const [selectedSlug, setSelectedSlug] = useState(
     normalizedInitialPosts[0]?.slug || ""
   );
   const [draft, setDraft] = useState(normalizedInitialPosts[0] || emptyPost);
 
   useEffect(() => {
-    const savedPosts = window.localStorage.getItem(storageKey);
+    const savedPosts = window.localStorage.getItem(postsStorageKey);
+    const savedAuthors = window.localStorage.getItem(authorsStorageKey);
 
-    if (savedPosts) {
-      const parsedPosts = JSON.parse(savedPosts).map((post) =>
-        normalizePost(post)
-      );
-      window.requestAnimationFrame(() => {
+    window.requestAnimationFrame(() => {
+      if (savedAuthors) {
+        setAuthors(JSON.parse(savedAuthors).map((author) => normalizeAuthor(author)));
+      }
+
+      if (savedPosts) {
+        const parsedPosts = JSON.parse(savedPosts).map((post) =>
+          normalizePost(post)
+        );
         setPosts(parsedPosts);
         setSelectedSlug(parsedPosts[0]?.slug || "");
         setDraft(parsedPosts[0] || emptyPost);
-      });
-    }
+      }
+    });
   }, []);
 
   useEffect(() => {
-    window.localStorage.setItem(storageKey, JSON.stringify(posts));
+    window.localStorage.setItem(postsStorageKey, JSON.stringify(posts));
   }, [posts]);
+
+  useEffect(() => {
+    window.localStorage.setItem(authorsStorageKey, JSON.stringify(authors));
+  }, [authors]);
 
   const stats = useMemo(
     () => ({
       total: posts.length,
       published: posts.filter((post) => post.status === "published").length,
+      awaitingApproval: posts.filter(
+        (post) => post.approvalStatus === "submitted"
+      ).length,
       drafts: posts.filter((post) => post.status === "draft").length
     }),
     [posts]
@@ -125,7 +169,45 @@ export default function AdminDashboard({ initialPosts }) {
       nextDraft.slug = createSlug(value);
     }
 
+    if (field === "authorId") {
+      const author = authors.find((item) => item.id === value);
+      nextDraft.authorName = author?.name || "";
+    }
+
+    if (field === "approvalStatus" && value !== "approved") {
+      nextDraft.status = "draft";
+    }
+
     setDraft(nextDraft);
+  }
+
+  function updateAuthorDraft(field, value) {
+    setAuthorDraft((currentAuthor) => ({
+      ...currentAuthor,
+      [field]: value
+    }));
+  }
+
+  function addAuthor(event) {
+    event.preventDefault();
+
+    const nextAuthor = normalizeAuthor({
+      ...authorDraft,
+      id: createSlug(authorDraft.name)
+    });
+
+    if (!nextAuthor.name) return;
+
+    setAuthors((currentAuthors) => {
+      const exists = currentAuthors.some((author) => author.id === nextAuthor.id);
+      if (exists) {
+        return currentAuthors.map((author) =>
+          author.id === nextAuthor.id ? nextAuthor : author
+        );
+      }
+      return [...currentAuthors, nextAuthor];
+    });
+    setAuthorDraft(emptyAuthor);
   }
 
   function updateSection(sectionIndex, field, value) {
@@ -206,10 +288,16 @@ export default function AdminDashboard({ initialPosts }) {
   function saveDraft(event) {
     event.preventDefault();
 
+    const selectedAuthor = authors.find((author) => author.id === draft.authorId);
     const nextPost = normalizePost({
       ...draft,
+      authorName: selectedAuthor?.name || draft.authorName,
       slug: draft.slug || createSlug(draft.title),
       date: draft.date || new Date().toISOString().slice(0, 10),
+      status:
+        draft.approvalStatus === "approved" && draft.status === "published"
+          ? "published"
+          : draft.status,
       content: draft.content.map((section) => ({
         heading: section.heading || "Article section",
         paragraphs: section.paragraphs
@@ -251,7 +339,7 @@ export default function AdminDashboard({ initialPosts }) {
           <div>
             <h2>Posts</h2>
             <p>
-              {stats.published} published, {stats.drafts} draft
+              {stats.published} live, {stats.awaitingApproval} awaiting approval
             </p>
           </div>
           <button type="button" onClick={startNewPost}>
@@ -268,8 +356,8 @@ export default function AdminDashboard({ initialPosts }) {
             Live
           </span>
           <span>
-            <strong>{stats.drafts}</strong>
-            Drafts
+            <strong>{stats.awaitingApproval}</strong>
+            Review
           </span>
         </div>
         <div className="admin-post-list">
@@ -282,11 +370,48 @@ export default function AdminDashboard({ initialPosts }) {
             >
               <strong>{post.title}</strong>
               <span>
-                {post.status} · {post.platformArea}
+                {post.status} - {post.approvalStatus} - {post.authorName}
               </span>
             </button>
           ))}
         </div>
+
+        <form className="author-manager" onSubmit={addAuthor}>
+          <h3>Authors</h3>
+          <div className="author-list">
+            {authors.map((author) => (
+              <span key={author.id}>
+                <strong>{author.name}</strong>
+                {author.role}
+              </span>
+            ))}
+          </div>
+          <label>
+            Author name
+            <input
+              type="text"
+              value={authorDraft.name}
+              onChange={(event) => updateAuthorDraft("name", event.target.value)}
+            />
+          </label>
+          <label>
+            Role
+            <input
+              type="text"
+              value={authorDraft.role}
+              onChange={(event) => updateAuthorDraft("role", event.target.value)}
+            />
+          </label>
+          <label>
+            Bio
+            <textarea
+              rows="3"
+              value={authorDraft.bio}
+              onChange={(event) => updateAuthorDraft("bio", event.target.value)}
+            />
+          </label>
+          <button type="submit">Add author</button>
+        </form>
       </aside>
 
       <form className="admin-editor" onSubmit={saveDraft}>
@@ -300,6 +425,21 @@ export default function AdminDashboard({ initialPosts }) {
               Delete
             </button>
           ) : null}
+        </div>
+
+        <div className="workflow-strip" aria-label="Editorial workflow">
+          <span className={draft.approvalStatus === "draft" ? "active" : ""}>
+            Draft
+          </span>
+          <span className={draft.approvalStatus === "submitted" ? "active" : ""}>
+            Social submit
+          </span>
+          <span className={draft.approvalStatus === "needs changes" ? "active" : ""}>
+            Changes
+          </span>
+          <span className={draft.approvalStatus === "approved" ? "active" : ""}>
+            Final approval
+          </span>
         </div>
 
         <div className="form-row">
@@ -336,6 +476,60 @@ export default function AdminDashboard({ initialPosts }) {
             required
           />
         </label>
+
+        <div className="form-row">
+          <label>
+            Author
+            <select
+              value={draft.authorId}
+              onChange={(event) => updateDraft("authorId", event.target.value)}
+            >
+              {authors.map((author) => (
+                <option key={author.id} value={author.id}>
+                  {author.name}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label>
+            Submitted by
+            <input
+              type="text"
+              value={draft.submittedBy}
+              onChange={(event) => updateDraft("submittedBy", event.target.value)}
+            />
+          </label>
+        </div>
+
+        <div className="form-row">
+          <label>
+            Approval status
+            <select
+              value={draft.approvalStatus}
+              onChange={(event) =>
+                updateDraft("approvalStatus", event.target.value)
+              }
+            >
+              {approvalOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label>
+            Final approver
+            <input
+              type="text"
+              value={draft.finalApprover}
+              onChange={(event) =>
+                updateDraft("finalApprover", event.target.value)
+              }
+            />
+          </label>
+        </div>
 
         <div className="form-row">
           <label>
@@ -385,7 +579,7 @@ export default function AdminDashboard({ initialPosts }) {
           </label>
 
           <label>
-            Status
+            Public status
             <select
               value={draft.status}
               onChange={(event) => updateDraft("status", event.target.value)}
@@ -416,18 +610,51 @@ export default function AdminDashboard({ initialPosts }) {
           </label>
         </div>
 
+        <div className="form-row">
+          <label>
+            Social channels
+            <input
+              type="text"
+              value={draft.socialChannel}
+              onChange={(event) =>
+                updateDraft("socialChannel", event.target.value)
+              }
+            />
+          </label>
+
+          <label>
+            Visual tone
+            <select
+              value={draft.imageTone}
+              onChange={(event) => updateDraft("imageTone", event.target.value)}
+            >
+              {toneOptions.map((tone) => (
+                <option key={tone} value={tone}>
+                  {tone}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+
         <label>
-          Visual tone
-          <select
-            value={draft.imageTone}
-            onChange={(event) => updateDraft("imageTone", event.target.value)}
-          >
-            {toneOptions.map((tone) => (
-              <option key={tone} value={tone}>
-                {tone}
-              </option>
-            ))}
-          </select>
+          Social caption
+          <textarea
+            rows="3"
+            value={draft.socialCopy}
+            onChange={(event) => updateDraft("socialCopy", event.target.value)}
+          />
+        </label>
+
+        <label>
+          Reviewer notes
+          <textarea
+            rows="3"
+            value={draft.reviewerNotes}
+            onChange={(event) =>
+              updateDraft("reviewerNotes", event.target.value)
+            }
+          />
         </label>
 
         <div className="content-builder">

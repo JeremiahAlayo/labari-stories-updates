@@ -12,6 +12,7 @@ export default function PostHero({ post }) {
             <span>{formatDate(post.date)}</span>
             <span>{post.readTime}</span>
             {post.platformArea ? <span>{post.platformArea}</span> : null}
+            {post.authorName ? <span>{post.authorName}</span> : null}
           </div>
         </div>
         <div
