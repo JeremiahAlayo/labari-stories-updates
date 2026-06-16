@@ -11,7 +11,7 @@ export default function SiteHeader() {
         <Link className="brand" href="/blog" aria-label="Labari home">
           <Image
             className="brand-logo"
-            src="/labari-logo.jpeg"
+            src="/labari-logo-main.png"
             alt=""
             width="48"
             height="48"
