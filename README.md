@@ -104,7 +104,7 @@ Post shape:
 
 Only posts with `status: "published"` appear on the public blog.
 
-The `/admin` page provides a CMS-style publishing workspace using browser local storage for review purposes. It is structured like a professional content platform so the team can evaluate the workflow before connecting it to the main Labari backend.
+The `/admin` page provides a CMS-style publishing workspace for review purposes. It is structured like a professional content platform so the team can evaluate the workflow before connecting it to the main Labari backend.
 
 Current admin capabilities include:
 
@@ -133,7 +133,7 @@ Current admin capabilities include:
 - Featured image URL field
 - Scheduled publishing field
 
-Because this is still a standalone review module, admin data is stored in the reviewer browser only. Production integration should connect these screens to authenticated Labari users, server-side permissions, a database, media storage, notification services, and a real analytics API.
+Because this is still a standalone review module, the admin screens model the workflow and management structure without a production database. Production integration should connect these screens to authenticated Labari users, server-side permissions, a database, media storage, notification services, and a real analytics API.
 
 Suggested editorial flow:
 

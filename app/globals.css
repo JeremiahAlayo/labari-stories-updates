@@ -1119,6 +1119,7 @@ h2 {
 }
 
 .cms-sidebar-header button,
+.cms-new-link,
 .cms-panel-header button,
 .editor-actions button,
 .bulk-actions button,
@@ -1139,7 +1140,8 @@ h2 {
 .cms-editor button[type="submit"],
 .cms-panel button[type="submit"],
 .editor-actions button:last-child,
-.cms-sidebar-header button {
+.cms-sidebar-header button,
+.cms-new-link {
   border-color: transparent;
   background: var(--gradient-action);
   box-shadow: var(--shadow-green);
@@ -1151,8 +1153,11 @@ h2 {
   gap: 6px;
 }
 
-.cms-menu button {
+.cms-menu button,
+.cms-menu a {
   min-height: 40px;
+  display: flex;
+  align-items: center;
   border: 1px solid transparent;
   border-radius: 8px;
   background: transparent;
@@ -1161,7 +1166,9 @@ h2 {
   text-align: left;
 }
 
-.cms-menu button.active {
+.cms-menu button.active,
+.cms-menu a.active,
+.cms-menu a:hover {
   border-color: rgba(34, 197, 94, 0.3);
   background: rgba(34, 197, 94, 0.12);
   color: var(--color-text);
@@ -1335,7 +1342,8 @@ h2 {
   min-width: 0;
 }
 
-.cms-row button {
+.cms-row button,
+.cms-row a {
   min-width: 0;
   border: 0;
   background: transparent;

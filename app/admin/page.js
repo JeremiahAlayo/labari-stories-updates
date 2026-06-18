@@ -1,4 +1,4 @@
-import AdminDashboard from "@/components/AdminDashboard";
+import AdminDashboardStatic from "@/components/AdminDashboardStatic";
 import Footer from "@/components/Footer";
 import SiteHeader from "@/components/SiteHeader";
 import { authors } from "@/data/authors";
@@ -23,7 +23,7 @@ export default function AdminPage() {
             drafts for review, and track final approval before publishing.
           </p>
         </section>
-        <AdminDashboard initialPosts={posts} initialAuthors={authors} />
+        <AdminDashboardStatic initialPosts={posts} initialAuthors={authors} />
       </main>
       <Footer />
     </>
