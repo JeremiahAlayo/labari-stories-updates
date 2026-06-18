@@ -13,7 +13,7 @@ This project provides a polished publishing area for Labari with:
 - Search
 - SEO metadata
 - Sample posts for layout testing
-- A lightweight editorial workspace at `/admin`
+- A CMS-style editorial workspace at `/admin`
 - Browser text-to-speech controls on article pages
 
 The code is organized so it can be reviewed, maintained, and connected to a production content source later without changing the public user experience.
@@ -104,15 +104,45 @@ Post shape:
 
 Only posts with `status: "published"` appear on the public blog.
 
-The `/admin` page provides a simple editorial workspace using browser local storage. Editors can manage title, slug, SEO description, category, platform area, audience, authors, social captions, publish status, approval status, final approver, reviewer notes, date, reading time, visual tone, and full article sections. The same structure can later be connected to an API, CMS, or database.
+The `/admin` page provides a CMS-style publishing workspace using browser local storage for review purposes. It is structured like a professional content platform so the team can evaluate the workflow before connecting it to the main Labari backend.
+
+Current admin capabilities include:
+
+- Dashboard overview
+- Blog post list with search and filters
+- Create/edit post workspace
+- Dynamic categories
+- Dynamic tags
+- Authors and contributor management
+- Role preview for Super Admin, Head of Social, Final Approver, Content Manager, Editor, Author, and Contributor
+- Review queue
+- Approval workflow board
+- Published and scheduled post views
+- Media library placeholder
+- Approval comments and feedback
+- Analytics summary placeholder
+- User roles and permissions screen
+- Settings screen
+- Activity logs
+- Bulk post actions
+- Featured and pinned post controls
+- Archive and restore-to-draft controls
+- Reading time estimate
+- Revision history records
+- SEO title, meta description, and slug controls
+- Featured image URL field
+- Scheduled publishing field
+
+Because this is still a standalone review module, admin data is stored in the reviewer browser only. Production integration should connect these screens to authenticated Labari users, server-side permissions, a database, media storage, notification services, and a real analytics API.
 
 Suggested editorial flow:
 
-1. Social media team creates or edits a draft.
-2. The post is marked as `submitted`.
-3. Head of Social Media reviews notes, caption, and article body.
-4. If approved, approval status becomes `approved`.
-5. Only approved posts should be moved to public `published` status.
+1. Author or contributor creates a draft.
+2. Draft is submitted for review.
+3. Head of Social or Admin Approver approves, rejects, or requests changes.
+4. Approved content moves to final approval.
+5. Final approver publishes or schedules the post.
+6. Published posts become visible on the public blog.
 
 ## Analytics
 
@@ -163,8 +193,12 @@ Recommended next steps:
 
 - Connect posts to a backend or CMS
 - Add authenticated admin access
-- Add image upload support
-- Add author profiles
+- Connect authors to real Labari user accounts
+- Add server-side roles and permissions
+- Add image upload and media storage
+- Add notification delivery for review and approval events
+- Add hard-delete trash and restore rules
+- Add live GA4/dashboard analytics from the production analytics source
 - Add pagination for larger post collections
 - Add sitemap and RSS feed generation
 - Add automated tests for filtering, routing, and post rendering
