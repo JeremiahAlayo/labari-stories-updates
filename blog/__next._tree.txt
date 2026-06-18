@@ -1,2 +1,2 @@
-:HL["/labari-stories-updates/_next/static/chunks/038sc-0-dijcn.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"blog","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"1TQpfoeMiALOkyMDoS_uo"}
+:HL["/labari-stories-updates/_next/static/chunks/21g0v5sswnxgy.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"blog","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"R_MY3_TD23FNjx5mfLo1r"}
