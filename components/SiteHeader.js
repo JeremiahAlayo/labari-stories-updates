@@ -1,6 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 
+const logoSrc =
+  process.env.GITHUB_PAGES === "true"
+    ? "/labari-stories-updates/labari-logo-main.png"
+    : "/labari-logo-main.png";
+
 export default function SiteHeader() {
   return (
     <header className="site-header">
@@ -11,7 +16,7 @@ export default function SiteHeader() {
         <Link className="brand" href="/blog" aria-label="Labari home">
           <Image
             className="brand-logo"
-            src="/labari-logo-main.png"
+            src={logoSrc}
             alt=""
             width="80"
             height="80"
