@@ -50,6 +50,12 @@ npm run dev
 
 Open `http://localhost:3000/blog`.
 
+Admin/editorial workspace:
+
+```text
+http://localhost:3000/admin
+```
+
 Production build:
 
 ```bash
@@ -57,13 +63,13 @@ npm run build
 npm start
 ```
 
-## Managing Posts
+GitHub Pages static build:
 
-Open the admin workspace at:
-
-```text
-http://localhost:3000/admin
+```bash
+npm run build:pages
 ```
+
+## Managing Posts
 
 Sample posts live in `data/posts.js`.
 
@@ -107,6 +113,25 @@ Suggested editorial flow:
 3. Head of Social Media reviews notes, caption, and article body.
 4. If approved, approval status becomes `approved`.
 5. Only approved posts should be moved to public `published` status.
+
+## Analytics
+
+Google Analytics 4 is supported through an environment variable. Create `.env.local` and add:
+
+```text
+NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
+```
+
+Do not commit real analytics IDs if the team wants to keep them private. The included `.env.example` shows the expected variable name.
+
+## Public Preview
+
+This project can be shown in two ways:
+
+- GitHub repository for code review.
+- GitHub Pages or Vercel for non-technical reviewers who only need a live link.
+
+For GitHub Pages, build with `npm run build:pages` and publish the generated `out/` folder to the `gh-pages` branch.
 
 Recommended platform areas include:
 

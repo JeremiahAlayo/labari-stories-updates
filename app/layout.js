@@ -1,4 +1,5 @@
 import "./globals.css";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 
 export const metadata = {
   metadataBase: new URL("https://www.labaribooks.com"),
@@ -19,9 +20,14 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  const gaMeasurementId = process.env.NEXT_PUBLIC_GA_ID;
+
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {children}
+        <GoogleAnalytics measurementId={gaMeasurementId} />
+      </body>
     </html>
   );
 }

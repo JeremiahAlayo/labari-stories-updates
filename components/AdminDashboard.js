@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { createSlug } from "@/utils/slug";
 
-const postsStorageKey = "labari-blog-admin-posts-v3";
+const postsStorageKey = "labari-blog-admin-posts-v4";
 const authorsStorageKey = "labari-blog-authors-v1";
 
 const categoryOptions = [
@@ -38,6 +38,7 @@ const audienceOptions = [
 
 const approvalOptions = ["draft", "submitted", "needs changes", "approved"];
 const toneOptions = ["green", "blue", "amber", "violet", "slate"];
+const panels = ["Content", "Workflow", "Body", "Authors"];
 
 const emptyAuthor = {
   name: "",
@@ -109,6 +110,7 @@ export default function AdminDashboard({ initialPosts, initialAuthors }) {
   const [posts, setPosts] = useState(normalizedInitialPosts);
   const [authors, setAuthors] = useState(normalizedInitialAuthors);
   const [authorDraft, setAuthorDraft] = useState(emptyAuthor);
+  const [activePanel, setActivePanel] = useState("Content");
   const [selectedSlug, setSelectedSlug] = useState(
     normalizedInitialPosts[0]?.slug || ""
   );
@@ -120,7 +122,9 @@ export default function AdminDashboard({ initialPosts, initialAuthors }) {
 
     window.requestAnimationFrame(() => {
       if (savedAuthors) {
-        setAuthors(JSON.parse(savedAuthors).map((author) => normalizeAuthor(author)));
+        setAuthors(
+          JSON.parse(savedAuthors).map((author) => normalizeAuthor(author))
+        );
       }
 
       if (savedPosts) {
@@ -149,14 +153,22 @@ export default function AdminDashboard({ initialPosts, initialAuthors }) {
       awaitingApproval: posts.filter(
         (post) => post.approvalStatus === "submitted"
       ).length,
-      drafts: posts.filter((post) => post.status === "draft").length
+      needsChanges: posts.filter((post) => post.approvalStatus === "needs changes")
+        .length
     }),
     [posts]
+  );
+
+  const reviewQueue = posts.filter(
+    (post) =>
+      post.approvalStatus === "submitted" ||
+      post.approvalStatus === "needs changes"
   );
 
   function selectPost(post) {
     setSelectedSlug(post.slug);
     setDraft(normalizePost(post));
+    setActivePanel("Content");
   }
 
   function updateDraft(field, value) {
@@ -294,10 +306,6 @@ export default function AdminDashboard({ initialPosts, initialAuthors }) {
       authorName: selectedAuthor?.name || draft.authorName,
       slug: draft.slug || createSlug(draft.title),
       date: draft.date || new Date().toISOString().slice(0, 10),
-      status:
-        draft.approvalStatus === "approved" && draft.status === "published"
-          ? "published"
-          : draft.status,
       content: draft.content.map((section) => ({
         heading: section.heading || "Article section",
         paragraphs: section.paragraphs
@@ -322,6 +330,7 @@ export default function AdminDashboard({ initialPosts, initialAuthors }) {
   function startNewPost() {
     setSelectedSlug("");
     setDraft(emptyPost);
+    setActivePanel("Content");
   }
 
   function deletePost() {
@@ -337,15 +346,14 @@ export default function AdminDashboard({ initialPosts, initialAuthors }) {
       <aside className="admin-list" aria-label="Blog post list">
         <div className="admin-list-header">
           <div>
-            <h2>Posts</h2>
-            <p>
-              {stats.published} live, {stats.awaitingApproval} awaiting approval
-            </p>
+            <h2>Blog Control</h2>
+            <p>Draft, review, approve, and publish Labari articles.</p>
           </div>
           <button type="button" onClick={startNewPost}>
             New post
           </button>
         </div>
+
         <div className="admin-stats" aria-label="Editorial summary">
           <span>
             <strong>{stats.total}</strong>
@@ -360,6 +368,29 @@ export default function AdminDashboard({ initialPosts, initialAuthors }) {
             Review
           </span>
         </div>
+
+        <div className="admin-guide">
+          <strong>Simple workflow</strong>
+          <ol>
+            <li>Social team writes the draft.</li>
+            <li>Submit for review.</li>
+            <li>Head of Social approves.</li>
+            <li>Publish after approval.</li>
+          </ol>
+        </div>
+
+        {reviewQueue.length > 0 ? (
+          <div className="review-queue">
+            <h3>Needs Attention</h3>
+            {reviewQueue.map((post) => (
+              <button key={post.slug} type="button" onClick={() => selectPost(post)}>
+                <strong>{post.title}</strong>
+                <span>{post.approvalStatus}</span>
+              </button>
+            ))}
+          </div>
+        ) : null}
+
         <div className="admin-post-list">
           {posts.map((post) => (
             <button
@@ -375,50 +406,13 @@ export default function AdminDashboard({ initialPosts, initialAuthors }) {
             </button>
           ))}
         </div>
-
-        <form className="author-manager" onSubmit={addAuthor}>
-          <h3>Authors</h3>
-          <div className="author-list">
-            {authors.map((author) => (
-              <span key={author.id}>
-                <strong>{author.name}</strong>
-                {author.role}
-              </span>
-            ))}
-          </div>
-          <label>
-            Author name
-            <input
-              type="text"
-              value={authorDraft.name}
-              onChange={(event) => updateAuthorDraft("name", event.target.value)}
-            />
-          </label>
-          <label>
-            Role
-            <input
-              type="text"
-              value={authorDraft.role}
-              onChange={(event) => updateAuthorDraft("role", event.target.value)}
-            />
-          </label>
-          <label>
-            Bio
-            <textarea
-              rows="3"
-              value={authorDraft.bio}
-              onChange={(event) => updateAuthorDraft("bio", event.target.value)}
-            />
-          </label>
-          <button type="submit">Add author</button>
-        </form>
       </aside>
 
       <form className="admin-editor" onSubmit={saveDraft}>
         <div className="editor-header">
           <div>
-            <p className="eyebrow">Post Editor</p>
-            <h2>{selectedSlug ? "Edit post" : "Create post"}</h2>
+            <p className="eyebrow">Selected Post</p>
+            <h2>{draft.title || "Create post"}</h2>
           </div>
           {selectedSlug ? (
             <button className="danger-button" type="button" onClick={deletePost}>
@@ -442,292 +436,376 @@ export default function AdminDashboard({ initialPosts, initialAuthors }) {
           </span>
         </div>
 
-        <div className="form-row">
-          <label>
-            Title
-            <input
-              type="text"
-              value={draft.title}
-              onChange={(event) => updateDraft("title", event.target.value)}
-              required
-            />
-          </label>
-
-          <label>
-            Slug
-            <input
-              type="text"
-              value={draft.slug}
-              onChange={(event) =>
-                updateDraft("slug", createSlug(event.target.value))
-              }
-              required
-            />
-          </label>
-        </div>
-
-        <label>
-          SEO description
-          <textarea
-            rows="3"
-            value={draft.description}
-            onChange={(event) => updateDraft("description", event.target.value)}
-            maxLength="180"
-            required
-          />
-        </label>
-
-        <div className="form-row">
-          <label>
-            Author
-            <select
-              value={draft.authorId}
-              onChange={(event) => updateDraft("authorId", event.target.value)}
+        <div className="admin-tabs" role="tablist" aria-label="Editor sections">
+          {panels.map((panel) => (
+            <button
+              aria-selected={activePanel === panel}
+              className={activePanel === panel ? "active" : ""}
+              key={panel}
+              onClick={() => setActivePanel(panel)}
+              role="tab"
+              type="button"
             >
-              {authors.map((author) => (
-                <option key={author.id} value={author.id}>
-                  {author.name}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <label>
-            Submitted by
-            <input
-              type="text"
-              value={draft.submittedBy}
-              onChange={(event) => updateDraft("submittedBy", event.target.value)}
-            />
-          </label>
-        </div>
-
-        <div className="form-row">
-          <label>
-            Approval status
-            <select
-              value={draft.approvalStatus}
-              onChange={(event) =>
-                updateDraft("approvalStatus", event.target.value)
-              }
-            >
-              {approvalOptions.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <label>
-            Final approver
-            <input
-              type="text"
-              value={draft.finalApprover}
-              onChange={(event) =>
-                updateDraft("finalApprover", event.target.value)
-              }
-            />
-          </label>
-        </div>
-
-        <div className="form-row">
-          <label>
-            Category
-            <select
-              value={draft.category}
-              onChange={(event) => updateDraft("category", event.target.value)}
-            >
-              {categoryOptions.map((category) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <label>
-            Platform area
-            <select
-              value={draft.platformArea}
-              onChange={(event) =>
-                updateDraft("platformArea", event.target.value)
-              }
-            >
-              {platformAreaOptions.map((area) => (
-                <option key={area} value={area}>
-                  {area}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-
-        <div className="form-row">
-          <label>
-            Audience
-            <select
-              value={draft.audience}
-              onChange={(event) => updateDraft("audience", event.target.value)}
-            >
-              {audienceOptions.map((audience) => (
-                <option key={audience} value={audience}>
-                  {audience}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <label>
-            Public status
-            <select
-              value={draft.status}
-              onChange={(event) => updateDraft("status", event.target.value)}
-            >
-              <option value="draft">Draft</option>
-              <option value="published">Published</option>
-            </select>
-          </label>
-        </div>
-
-        <div className="form-row">
-          <label>
-            Publish date
-            <input
-              type="date"
-              value={draft.date}
-              onChange={(event) => updateDraft("date", event.target.value)}
-            />
-          </label>
-
-          <label>
-            Read time
-            <input
-              type="text"
-              value={draft.readTime}
-              onChange={(event) => updateDraft("readTime", event.target.value)}
-            />
-          </label>
-        </div>
-
-        <div className="form-row">
-          <label>
-            Social channels
-            <input
-              type="text"
-              value={draft.socialChannel}
-              onChange={(event) =>
-                updateDraft("socialChannel", event.target.value)
-              }
-            />
-          </label>
-
-          <label>
-            Visual tone
-            <select
-              value={draft.imageTone}
-              onChange={(event) => updateDraft("imageTone", event.target.value)}
-            >
-              {toneOptions.map((tone) => (
-                <option key={tone} value={tone}>
-                  {tone}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-
-        <label>
-          Social caption
-          <textarea
-            rows="3"
-            value={draft.socialCopy}
-            onChange={(event) => updateDraft("socialCopy", event.target.value)}
-          />
-        </label>
-
-        <label>
-          Reviewer notes
-          <textarea
-            rows="3"
-            value={draft.reviewerNotes}
-            onChange={(event) =>
-              updateDraft("reviewerNotes", event.target.value)
-            }
-          />
-        </label>
-
-        <div className="content-builder">
-          <div className="content-builder-header">
-            <div>
-              <p className="eyebrow">Article Body</p>
-              <h3>Sections and paragraphs</h3>
-            </div>
-            <button type="button" onClick={addSection}>
-              Add section
+              {panel}
             </button>
-          </div>
+          ))}
+        </div>
 
-          {draft.content.map((section, sectionIndex) => (
-            <div className="content-section" key={`section-${sectionIndex}`}>
-              <div className="section-header">
-                <label>
-                  Section heading
-                  <input
-                    type="text"
-                    value={section.heading}
-                    onChange={(event) =>
-                      updateSection(sectionIndex, "heading", event.target.value)
-                    }
-                  />
-                </label>
-                <button
-                  className="danger-button"
-                  type="button"
-                  onClick={() => removeSection(sectionIndex)}
+        {activePanel === "Content" ? (
+          <div className="admin-panel" role="tabpanel">
+            <div className="form-row">
+              <label>
+                Title
+                <input
+                  type="text"
+                  value={draft.title}
+                  onChange={(event) => updateDraft("title", event.target.value)}
+                  required
+                />
+              </label>
+
+              <label>
+                Slug
+                <input
+                  type="text"
+                  value={draft.slug}
+                  onChange={(event) =>
+                    updateDraft("slug", createSlug(event.target.value))
+                  }
+                  required
+                />
+              </label>
+            </div>
+
+            <label>
+              SEO description
+              <textarea
+                rows="3"
+                value={draft.description}
+                onChange={(event) =>
+                  updateDraft("description", event.target.value)
+                }
+                maxLength="180"
+                required
+              />
+            </label>
+
+            <div className="form-row">
+              <label>
+                Category
+                <select
+                  value={draft.category}
+                  onChange={(event) => updateDraft("category", event.target.value)}
                 >
-                  Remove
+                  {categoryOptions.map((category) => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label>
+                Platform area
+                <select
+                  value={draft.platformArea}
+                  onChange={(event) =>
+                    updateDraft("platformArea", event.target.value)
+                  }
+                >
+                  {platformAreaOptions.map((area) => (
+                    <option key={area} value={area}>
+                      {area}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+
+            <div className="form-row">
+              <label>
+                Audience
+                <select
+                  value={draft.audience}
+                  onChange={(event) => updateDraft("audience", event.target.value)}
+                >
+                  {audienceOptions.map((audience) => (
+                    <option key={audience} value={audience}>
+                      {audience}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label>
+                Visual tone
+                <select
+                  value={draft.imageTone}
+                  onChange={(event) => updateDraft("imageTone", event.target.value)}
+                >
+                  {toneOptions.map((tone) => (
+                    <option key={tone} value={tone}>
+                      {tone}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+          </div>
+        ) : null}
+
+        {activePanel === "Workflow" ? (
+          <div className="admin-panel" role="tabpanel">
+            <div className="form-row">
+              <label>
+                Author
+                <select
+                  value={draft.authorId}
+                  onChange={(event) => updateDraft("authorId", event.target.value)}
+                >
+                  {authors.map((author) => (
+                    <option key={author.id} value={author.id}>
+                      {author.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label>
+                Submitted by
+                <input
+                  type="text"
+                  value={draft.submittedBy}
+                  onChange={(event) =>
+                    updateDraft("submittedBy", event.target.value)
+                  }
+                />
+              </label>
+            </div>
+
+            <div className="form-row">
+              <label>
+                Approval status
+                <select
+                  value={draft.approvalStatus}
+                  onChange={(event) =>
+                    updateDraft("approvalStatus", event.target.value)
+                  }
+                >
+                  {approvalOptions.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <label>
+                Final approver
+                <input
+                  type="text"
+                  value={draft.finalApprover}
+                  onChange={(event) =>
+                    updateDraft("finalApprover", event.target.value)
+                  }
+                />
+              </label>
+            </div>
+
+            <div className="form-row">
+              <label>
+                Public status
+                <select
+                  value={draft.status}
+                  onChange={(event) => updateDraft("status", event.target.value)}
+                >
+                  <option value="draft">Draft</option>
+                  <option value="published">Published</option>
+                </select>
+              </label>
+
+              <label>
+                Publish date
+                <input
+                  type="date"
+                  value={draft.date}
+                  onChange={(event) => updateDraft("date", event.target.value)}
+                />
+              </label>
+            </div>
+
+            <div className="form-row">
+              <label>
+                Read time
+                <input
+                  type="text"
+                  value={draft.readTime}
+                  onChange={(event) => updateDraft("readTime", event.target.value)}
+                />
+              </label>
+
+              <label>
+                Social channels
+                <input
+                  type="text"
+                  value={draft.socialChannel}
+                  onChange={(event) =>
+                    updateDraft("socialChannel", event.target.value)
+                  }
+                />
+              </label>
+            </div>
+
+            <label>
+              Social caption
+              <textarea
+                rows="3"
+                value={draft.socialCopy}
+                onChange={(event) => updateDraft("socialCopy", event.target.value)}
+              />
+            </label>
+
+            <label>
+              Reviewer notes
+              <textarea
+                rows="3"
+                value={draft.reviewerNotes}
+                onChange={(event) =>
+                  updateDraft("reviewerNotes", event.target.value)
+                }
+              />
+            </label>
+          </div>
+        ) : null}
+
+        {activePanel === "Body" ? (
+          <div className="admin-panel" role="tabpanel">
+            <div className="content-builder">
+              <div className="content-builder-header">
+                <div>
+                  <p className="eyebrow">Article Body</p>
+                  <h3>Sections and paragraphs</h3>
+                </div>
+                <button type="button" onClick={addSection}>
+                  Add section
                 </button>
               </div>
 
-              <div className="paragraph-list">
-                {section.paragraphs.map((paragraph, paragraphIndex) => (
-                  <label key={`paragraph-${sectionIndex}-${paragraphIndex}`}>
-                    Paragraph {paragraphIndex + 1}
-                    <textarea
-                      rows="4"
-                      value={paragraph}
-                      onChange={(event) =>
-                        updateParagraph(
-                          sectionIndex,
-                          paragraphIndex,
-                          event.target.value
-                        )
-                      }
-                    />
+              {draft.content.map((section, sectionIndex) => (
+                <div className="content-section" key={`section-${sectionIndex}`}>
+                  <div className="section-header">
+                    <label>
+                      Section heading
+                      <input
+                        type="text"
+                        value={section.heading}
+                        onChange={(event) =>
+                          updateSection(
+                            sectionIndex,
+                            "heading",
+                            event.target.value
+                          )
+                        }
+                      />
+                    </label>
                     <button
-                      className="small-button"
+                      className="danger-button"
                       type="button"
-                      onClick={() =>
-                        removeParagraph(sectionIndex, paragraphIndex)
-                      }
+                      onClick={() => removeSection(sectionIndex)}
                     >
-                      Remove paragraph
+                      Remove
                     </button>
-                  </label>
+                  </div>
+
+                  <div className="paragraph-list">
+                    {section.paragraphs.map((paragraph, paragraphIndex) => (
+                      <label key={`paragraph-${sectionIndex}-${paragraphIndex}`}>
+                        Paragraph {paragraphIndex + 1}
+                        <textarea
+                          rows="4"
+                          value={paragraph}
+                          onChange={(event) =>
+                            updateParagraph(
+                              sectionIndex,
+                              paragraphIndex,
+                              event.target.value
+                            )
+                          }
+                        />
+                        <button
+                          className="small-button"
+                          type="button"
+                          onClick={() =>
+                            removeParagraph(sectionIndex, paragraphIndex)
+                          }
+                        >
+                          Remove paragraph
+                        </button>
+                      </label>
+                    ))}
+                  </div>
+
+                  <button
+                    className="small-button"
+                    type="button"
+                    onClick={() => addParagraph(sectionIndex)}
+                  >
+                    Add paragraph
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
+        {activePanel === "Authors" ? (
+          <div className="admin-panel" role="tabpanel">
+            <div className="author-manager inline">
+              <h3>Authors</h3>
+              <div className="author-list">
+                {authors.map((author) => (
+                  <span key={author.id}>
+                    <strong>{author.name}</strong>
+                    {author.role}
+                  </span>
                 ))}
               </div>
-
-              <button
-                className="small-button"
-                type="button"
-                onClick={() => addParagraph(sectionIndex)}
-              >
-                Add paragraph
+              <label>
+                Author name
+                <input
+                  type="text"
+                  value={authorDraft.name}
+                  onChange={(event) =>
+                    updateAuthorDraft("name", event.target.value)
+                  }
+                />
+              </label>
+              <label>
+                Role
+                <input
+                  type="text"
+                  value={authorDraft.role}
+                  onChange={(event) =>
+                    updateAuthorDraft("role", event.target.value)
+                  }
+                />
+              </label>
+              <label>
+                Bio
+                <textarea
+                  rows="3"
+                  value={authorDraft.bio}
+                  onChange={(event) =>
+                    updateAuthorDraft("bio", event.target.value)
+                  }
+                />
+              </label>
+              <button type="button" onClick={addAuthor}>
+                Add author
               </button>
             </div>
-          ))}
-        </div>
+          </div>
+        ) : null}
 
         <div className="seo-preview" aria-label="Search preview">
           <span>Search preview</span>
