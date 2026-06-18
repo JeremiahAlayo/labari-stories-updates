@@ -38,7 +38,7 @@ const audienceOptions = [
 
 const approvalOptions = ["draft", "submitted", "needs changes", "approved"];
 const toneOptions = ["green", "blue", "amber", "violet", "slate"];
-const panels = ["Content", "Workflow", "Body", "Authors"];
+const panels = ["Content", "Workflow", "Analytics", "Body", "Authors"];
 
 const emptyAuthor = {
   name: "",
@@ -158,6 +158,41 @@ export default function AdminDashboard({ initialPosts, initialAuthors }) {
     }),
     [posts]
   );
+
+  const analyticsStatus = process.env.NEXT_PUBLIC_GA_ID
+    ? "GA4 connected"
+    : "GA4 ID not configured";
+
+  const analyticsCards = useMemo(
+    () => [
+      {
+        label: "Published posts",
+        value: stats.published,
+        hint: "Visible public articles"
+      },
+      {
+        label: "Pending review",
+        value: stats.awaitingApproval,
+        hint: "Waiting for final approval"
+      },
+      {
+        label: "SEO-ready",
+        value: posts.filter(
+          (post) => post.title && post.slug && post.description
+        ).length,
+        hint: "Title, slug, and meta description set"
+      },
+      {
+        label: "Social-ready",
+        value: posts.filter((post) => post.socialCopy && post.socialChannel)
+          .length,
+        hint: "Caption and channel prepared"
+      }
+    ],
+    [posts, stats]
+  );
+
+  const publishedPosts = posts.filter((post) => post.status === "published");
 
   const reviewQueue = posts.filter(
     (post) =>
@@ -675,6 +710,45 @@ export default function AdminDashboard({ initialPosts, initialAuthors }) {
                 }
               />
             </label>
+          </div>
+        ) : null}
+
+        {activePanel === "Analytics" ? (
+          <div className="admin-panel" role="tabpanel">
+            <div className="analytics-header">
+              <div>
+                <p className="eyebrow">Analytics</p>
+                <h3>Publishing and traffic snapshot</h3>
+                <p>
+                  Track article readiness here. Live page views, top sources,
+                  and engagement can appear after the GA4 measurement ID is set.
+                </p>
+              </div>
+              <span>{analyticsStatus}</span>
+            </div>
+
+            <div className="analytics-grid">
+              {analyticsCards.map((card) => (
+                <span key={card.label}>
+                  <strong>{card.value}</strong>
+                  {card.label}
+                  <small>{card.hint}</small>
+                </span>
+              ))}
+            </div>
+
+            <div className="analytics-table">
+              <h4>Article tracking</h4>
+              {publishedPosts.map((post) => (
+                <div key={post.slug}>
+                  <span>
+                    <strong>{post.title}</strong>
+                    {post.category} - {post.platformArea}
+                  </span>
+                  <code>/blog/{post.slug}</code>
+                </div>
+              ))}
+            </div>
           </div>
         ) : null}
 
