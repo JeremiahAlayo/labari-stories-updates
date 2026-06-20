@@ -614,6 +614,10 @@ h2 {
   padding-bottom: 84px;
 }
 
+.admin-shell .cms-shell {
+  margin-top: 36px;
+}
+
 .admin-intro {
   padding: 64px 0 24px;
 }
@@ -1180,6 +1184,7 @@ h2 {
 }
 
 .cms-main {
+  min-width: 0;
   padding: 18px;
 }
 
@@ -1263,6 +1268,7 @@ h2 {
   margin-top: 14px;
 }
 
+.cms-mini-list a,
 .cms-mini-list button,
 .workflow-board button {
   width: 100%;
@@ -1290,6 +1296,20 @@ h2 {
 .autosave-note {
   color: var(--color-muted);
   font-size: 0.82rem;
+}
+
+.cms-empty {
+  display: grid;
+  gap: 4px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+  color: var(--color-muted);
+  padding: 18px;
+}
+
+.cms-empty strong {
+  color: var(--color-text);
 }
 
 .cms-toolbar {

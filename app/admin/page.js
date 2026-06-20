@@ -1,4 +1,5 @@
-import AdminDashboardStatic from "@/components/AdminDashboardStatic";
+import AdminShell from "@/components/admin/AdminShell";
+import { DashboardHome } from "@/components/admin/AdminSections";
 import Footer from "@/components/Footer";
 import SiteHeader from "@/components/SiteHeader";
 import { authors } from "@/data/authors";
@@ -23,7 +24,13 @@ export default function AdminPage() {
             drafts for review, and track final approval before publishing.
           </p>
         </section>
-        <AdminDashboardStatic initialPosts={posts} initialAuthors={authors} />
+        <AdminShell
+          active="dashboard"
+          description="A clear overview of publishing activity, team work, and blog health."
+          title="Dashboard"
+        >
+          <DashboardHome authors={authors} posts={posts} />
+        </AdminShell>
       </main>
       <Footer />
     </>
