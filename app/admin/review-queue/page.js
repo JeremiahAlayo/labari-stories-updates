@@ -1,4 +1,5 @@
 import AdminShell from "@/components/admin/AdminShell";
+import ApprovalSimulator from "@/components/admin/ApprovalSimulator";
 import { ReviewQueue } from "@/components/admin/AdminSections";
 import Footer from "@/components/Footer";
 import SiteHeader from "@/components/SiteHeader";
@@ -19,6 +20,7 @@ export default function ReviewQueuePage() {
           description="Review submitted posts, request changes, or move content to final approval."
           title="Review queue"
         >
+          <ApprovalSimulator posts={posts} />
           <ReviewQueue posts={posts} />
         </AdminShell>
       </main>

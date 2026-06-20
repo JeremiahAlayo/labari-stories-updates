@@ -1511,6 +1511,72 @@ h2 {
   padding-top: 14px;
 }
 
+.approval-demo-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.approval-post-list {
+  display: grid;
+  gap: 8px;
+}
+
+.approval-post-list button {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+  color: var(--color-muted);
+  padding: 12px;
+  text-align: left;
+}
+
+.approval-post-list button.active {
+  border-color: rgba(34, 197, 94, 0.35);
+  background: rgba(34, 197, 94, 0.12);
+}
+
+.approval-post-list strong,
+.approval-post-list span,
+.approval-post-list em {
+  display: block;
+}
+
+.approval-post-list strong {
+  color: var(--color-text);
+}
+
+.approval-post-list em {
+  margin-top: 5px;
+  color: #86efac;
+  font-size: 0.78rem;
+  font-style: normal;
+  text-transform: capitalize;
+}
+
+.approval-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.approval-actions button,
+.approval-simulator .cms-panel-header button {
+  min-height: 38px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  padding: 0 12px;
+}
+
+.approval-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+}
+
 .activity-list span,
 .taxonomy-list div,
 .user-list div {
@@ -1598,6 +1664,7 @@ h2 {
   .article-layout,
   .admin-grid,
   .cms-shell,
+  .approval-demo-grid,
   .cms-two-column,
   .cms-editor-grid,
   .toolbar {

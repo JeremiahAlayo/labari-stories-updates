@@ -5,7 +5,7 @@ import { posts } from "@/data/posts";
 import { getCategoriesWithCounts, getPublishedPosts } from "@/utils/posts";
 
 export const metadata = {
-  title: "Blog",
+  title: "Labari Blog",
   description:
     "Explore Labari product updates, reading guides, book discovery articles, feature guides, and platform education.",
   alternates: {
@@ -24,9 +24,10 @@ export default function BlogPage() {
         <section className="blog-hero">
           <div className="container hero-grid">
             <div className="hero-copy">
-              <p className="eyebrow">Stories & Updates</p>
+              <p className="eyebrow">Labari Blog</p>
               <h1>
-                Read the latest from <span className="gradient-text">Labari.</span>
+                Guides, news, and platform updates from{" "}
+                <span className="gradient-text">Labari.</span>
               </h1>
               <p className="hero-text">
                 Explore product news, reading guides, book discovery articles,
