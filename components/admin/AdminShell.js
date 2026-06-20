@@ -1,7 +1,9 @@
 import Link from "next/link";
+import AdminActionNotice from "@/components/admin/AdminActionNotice";
 
 export const adminMenuItems = [
   { label: "Dashboard", href: "/admin", id: "dashboard" },
+  { label: "Project Brief", href: "/admin/project-brief", id: "project-brief" },
   { label: "Blog Posts", href: "/admin/posts", id: "posts" },
   { label: "Create Post", href: "/admin/create-post", id: "create-post" },
   { label: "Categories", href: "/admin/categories", id: "categories" },
@@ -78,6 +80,7 @@ export default function AdminShell({
 
         <div className="cms-stack">{children}</div>
       </div>
+      <AdminActionNotice />
     </section>
   );
 }

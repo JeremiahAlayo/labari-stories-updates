@@ -135,6 +135,54 @@ export function DashboardHome({ posts, authors }) {
   );
 }
 
+export function ProjectBrief() {
+  return (
+    <section className="project-brief-grid">
+      <div className="cms-panel">
+        <h3>What to tell your supervisor</h3>
+        <div className="brief-list">
+          <span>The Labari blog module has been built as a separate JavaScript/Next.js repository for review.</span>
+          <span>The public blog, article pages, search, categories, SEO metadata, and responsive layout are working.</span>
+          <span>The admin area has separate sections for posts, categories, authors, publishing access, analytics, settings, and logs.</span>
+          <span>The publishing model has been simplified: Super Admin can publish directly and can assign trusted authors to publish assigned posts.</span>
+          <span>Some controls are preview-only until the module is connected to real Labari backend services.</span>
+        </div>
+      </div>
+
+      <div className="cms-panel">
+        <h3>What to tell the CEO</h3>
+        <div className="brief-list">
+          <span>The blog module supports product education, announcements, SEO content, and reader guidance for Labari.</span>
+          <span>It gives the team a clean publishing experience that can later connect to real users and permissions.</span>
+          <span>The current version is suitable for visual review, structure review, and integration planning.</span>
+          <span>The next phase is backend integration so content, authors, media, analytics, and publishing access become real.</span>
+        </div>
+      </div>
+
+      <div className="cms-panel">
+        <h3>What continues after this</h3>
+        <div className="brief-list">
+          <span>Connect admin actions to authenticated Labari users.</span>
+          <span>Add a database or CMS API for posts, categories, tags, authors, and media.</span>
+          <span>Enforce Super Admin and Assigned Author publishing access on the server.</span>
+          <span>Connect image upload, Google Analytics, notifications, and activity logs to real services.</span>
+          <span>Add staging tests before merging into the main Labari platform.</span>
+        </div>
+      </div>
+
+      <div className="cms-panel">
+        <h3>Why some buttons do not save yet</h3>
+        <div className="brief-list">
+          <span>This repository is a standalone frontend module, not the main Labari backend.</span>
+          <span>Buttons that need a database now show a message instead of silently doing nothing.</span>
+          <span>The publishing access test is interactive because it runs with temporary browser state.</span>
+          <span>Real save, publish, upload, and analytics actions come in the backend integration phase.</span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function PostsManager({ posts }) {
   return (
     <section className="cms-panel">

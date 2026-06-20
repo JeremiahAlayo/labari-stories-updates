@@ -103,7 +103,7 @@ export default function ApprovalSimulator({ posts }) {
             assign an author to publish without approval.
           </p>
         </div>
-        <button type="button" onClick={() => setDemoPosts(seedPosts)}>
+        <button data-live-action="true" type="button" onClick={() => setDemoPosts(seedPosts)}>
           Reset demo
         </button>
       </div>
@@ -162,6 +162,7 @@ export default function ApprovalSimulator({ posts }) {
           <div className="approval-actions">
             <button
               disabled={!canDraft(roleId)}
+              data-live-action="true"
               type="button"
               onClick={() => updateSelected("draft", "Saved as draft.", false)}
             >
@@ -169,6 +170,7 @@ export default function ApprovalSimulator({ posts }) {
             </button>
             <button
               disabled={!canAssign(roleId)}
+              data-live-action="true"
               type="button"
               onClick={() => updateSelected("assigned", "Publishing access assigned.", true)}
             >
@@ -176,6 +178,7 @@ export default function ApprovalSimulator({ posts }) {
             </button>
             <button
               disabled={!canAssign(roleId)}
+              data-live-action="true"
               type="button"
               onClick={() => updateSelected("draft", "Publishing access removed.", false)}
             >
@@ -183,6 +186,7 @@ export default function ApprovalSimulator({ posts }) {
             </button>
             <button
               disabled={!canPublish(roleId, selectedPost)}
+              data-live-action="true"
               type="button"
               onClick={() => updateSelected("published", "Published directly.")}
             >
