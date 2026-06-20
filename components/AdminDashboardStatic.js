@@ -84,13 +84,17 @@ export default function AdminDashboardStatic({ initialPosts, initialAuthors }) {
       <aside className="cms-sidebar" aria-label="Blog administration">
         <div className="cms-sidebar-header">
           <h2>Labari CMS</h2>
-          <a className="cms-new-link" href="#create-post">
+          <a className="cms-new-link" href="?section=create-post#create-post">
             New post
           </a>
         </div>
         <nav className="cms-menu" aria-label="Admin menu">
           {menuItems.map(([label, id], index) => (
-            <a className={index === 0 ? "active" : ""} href={`#${id}`} key={id}>
+            <a
+              className={index === 0 ? "active" : ""}
+              href={`?section=${id}#${id}`}
+              key={id}
+            >
               {label}
             </a>
           ))}
@@ -145,7 +149,7 @@ export default function AdminDashboardStatic({ initialPosts, initialAuthors }) {
           <section className="cms-panel" id="blog-posts">
             <div className="cms-panel-header">
               <h3>Blog posts</h3>
-              <a className="cms-new-link" href="#create-post">
+              <a className="cms-new-link" href="?section=create-post#create-post">
                 Create post
               </a>
             </div>
@@ -509,7 +513,7 @@ function PostTable({ posts }) {
         <div className="cms-row" key={post.slug} role="row">
           <span>
             <input aria-label={`Select ${post.title}`} type="checkbox" />
-            <a href={`/blog/${post.slug}`}>
+            <a href={`../blog/${post.slug}/`}>
               <strong>{post.title}</strong>
               <small>/blog/{post.slug}</small>
             </a>
