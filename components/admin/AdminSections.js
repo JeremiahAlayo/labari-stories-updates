@@ -25,37 +25,28 @@ export const tagNames = [
 
 export const workflowStages = [
   "Draft",
-  "Submitted for Review",
-  "Changes Requested",
-  "Approved by Reviewer",
-  "Awaiting Final Approval",
+  "Ready to Publish",
   "Scheduled",
   "Published",
-  "Rejected"
+  "Archived"
 ];
 
 export function getPostStatus(post) {
-  if (post.status === "published" && post.approvalStatus === "submitted") {
-    return "submitted for review";
-  }
-
   if (post.status === "published") return "published";
 
-  return post.approvalStatus || post.status || "draft";
+  return post.status || "draft";
 }
 
 export function getAdminPostGroups(posts) {
   const publishedPosts = posts.filter((post) => post.status === "published");
-  const reviewPosts = posts.filter((post) =>
-    ["submitted", "needs changes", "approved"].includes(post.approvalStatus)
-  );
+  const accessPosts = posts.filter((post) => post.canPublishDirectly);
   const draftPosts = posts.filter((post) => post.status === "draft");
   const scheduledPosts = posts.filter((post) => post.status === "scheduled");
 
   return {
+    accessPosts,
     draftPosts,
     publishedPosts,
-    reviewPosts,
     scheduledPosts
   };
 }
@@ -65,7 +56,7 @@ function countBy(posts, predicate) {
 }
 
 export function StatGrid({ posts }) {
-  const { draftPosts, publishedPosts, reviewPosts, scheduledPosts } =
+  const { accessPosts, draftPosts, publishedPosts, scheduledPosts } =
     getAdminPostGroups(posts);
 
   return (
@@ -75,8 +66,8 @@ export function StatGrid({ posts }) {
         Total posts
       </span>
       <span>
-        <strong>{reviewPosts.length}</strong>
-        Pending approval
+        <strong>{accessPosts.length}</strong>
+        Direct access
       </span>
       <span>
         <strong>{publishedPosts.length}</strong>
@@ -95,7 +86,7 @@ export function StatGrid({ posts }) {
 }
 
 export function DashboardHome({ posts, authors }) {
-  const { draftPosts, publishedPosts, reviewPosts } = getAdminPostGroups(posts);
+  const { accessPosts, draftPosts, publishedPosts } = getAdminPostGroups(posts);
   const recentPosts = posts.slice(0, 4);
 
   return (
@@ -122,8 +113,8 @@ export function DashboardHome({ posts, authors }) {
           <h3>Publishing health</h3>
           <div className="activity-list">
             <span>
-              <strong>{reviewPosts.length} in review</strong>
-              <small>Posts waiting for editorial action</small>
+              <strong>{accessPosts.length} direct-publish posts</strong>
+              <small>Posts assigned to authors who can publish without approval</small>
             </span>
             <span>
               <strong>{publishedPosts.length} published</strong>
@@ -200,23 +191,21 @@ export function PostEditor({ authors }) {
           <p className="eyebrow">Publishing editor</p>
           <h2>Create or edit post</h2>
           <span className="autosave-note">
-            Prepare the article, SEO fields, image, schedule, and approval notes.
+            Prepare the article, SEO fields, image, schedule, and publishing access.
           </span>
         </div>
         <div className="editor-actions">
           <button type="button">Save draft</button>
-          <button type="button">Submit review</button>
+          <button type="button">Assign access</button>
           <button type="button">Publish</button>
         </div>
       </div>
       <div className="workflow-map" aria-label="Publishing workflow">
-        {["Draft", "Review", "Head Approval", "Final Approval", "Published"].map(
-          (stage, index) => (
-            <span className={index === 0 ? "active" : ""} key={stage}>
-              {stage}
-            </span>
-          )
-        )}
+        {["Draft", "Assigned Author", "Super Admin", "Published"].map((stage, index) => (
+          <span className={index === 0 ? "active" : ""} key={stage}>
+            {stage}
+          </span>
+        ))}
       </div>
       <div className="cms-editor-grid">
         <div className="cms-panel cms-stack">
@@ -240,9 +229,9 @@ export function PostEditor({ authors }) {
             <textarea rows="14" placeholder="Write the article content here..." />
           </label>
           <div className="approval-comments">
-            <h3>Approval comments</h3>
-            <textarea rows="3" placeholder="Reviewer feedback appears here..." />
-            <button type="button">Add comment</button>
+            <h3>Publishing notes</h3>
+            <textarea rows="3" placeholder="Internal note for this post..." />
+            <button type="button">Add note</button>
           </div>
         </div>
 
@@ -398,15 +387,15 @@ export function AuthorsManager({ authors }) {
 }
 
 export function ReviewQueue({ posts }) {
-  const { reviewPosts } = getAdminPostGroups(posts);
+  const { accessPosts } = getAdminPostGroups(posts);
 
   return (
     <section className="cms-panel">
       <div className="cms-panel-header">
-        <h3>Review queue</h3>
-        <span className="status-badge">{reviewPosts.length} pending</span>
+        <h3>Assigned publishing access</h3>
+        <span className="status-badge">{accessPosts.length} assigned</span>
       </div>
-      <PostTable posts={reviewPosts} />
+      <PostTable posts={accessPosts} />
     </section>
   );
 }
@@ -415,13 +404,11 @@ export function WorkflowBoard({ posts }) {
   return (
     <section className="cms-stack">
       <div className="workflow-map" aria-label="Publishing workflow">
-        {["Author", "Review Stage", "Head Approval", "Final Approval", "Published"].map(
-          (stage, index) => (
-            <span className={index < 2 ? "active" : ""} key={stage}>
-              {stage}
-            </span>
-          )
-        )}
+        {["Draft", "Assigned Author", "Super Admin", "Published"].map((stage, index) => (
+          <span className={index < 2 ? "active" : ""} key={stage}>
+            {stage}
+          </span>
+        ))}
       </div>
       <div className="workflow-board">
         {workflowStages.map((stage) => (
@@ -494,14 +481,14 @@ export function FeedbackPanel() {
       <h3>Comments and feedback</h3>
       <div className="activity-list">
         <span>
-          <strong>Request changes</strong>
-          <small>Improve intro clarity before final approval.</small>
-          <small>Head of Social - Review stage</small>
+          <strong>Content note</strong>
+          <small>Improve intro clarity before publishing.</small>
+          <small>Super Admin - Publishing</small>
         </span>
         <span>
-          <strong>Approval note</strong>
+          <strong>Publishing note</strong>
           <small>Confirm that the featured image is cleared for publishing.</small>
-          <small>Final approver - Publishing stage</small>
+          <small>Assigned Author - Draft</small>
         </span>
       </div>
     </section>
@@ -538,13 +525,17 @@ export function AnalyticsPanel({ posts }) {
 export function RolesPanel({ roles }) {
   return (
     <section className="cms-panel">
-      <h3>User roles and permissions</h3>
+      <h3>Publishing access</h3>
       <div className="user-list">
         {roles.map((role) => (
           <div key={role}>
             <span>
               <strong>{role}</strong>
-              Role-based publishing permissions
+              {role === "Super Admin"
+                ? "Can publish any post and assign direct-publish access"
+                : role === "Assigned Author"
+                  ? "Can publish assigned posts without approval"
+                  : "Can draft posts until access is assigned"}
             </span>
             <button type="button">Manage</button>
           </div>
@@ -560,15 +551,15 @@ export function SettingsPanel() {
       <h3>Settings</h3>
       <label className="inline-check">
         <input defaultChecked type="checkbox" />
-        Require final approval before publishing
+        Super Admin can publish directly
       </label>
       <label className="inline-check">
         <input defaultChecked type="checkbox" />
-        Notify approvers when posts are submitted
+        Assigned authors can publish their assigned posts
       </label>
       <label className="inline-check">
-        <input defaultChecked type="checkbox" />
-        Allow authors to edit returned posts
+        <input type="checkbox" />
+        Limit assigned authors to draft-only access
       </label>
     </section>
   );
@@ -580,14 +571,14 @@ export function ActivityLogs() {
       <h3>Activity logs</h3>
       <div className="activity-list">
         <span>
-          <strong>Publishing workflow mapped</strong>
-          <small>Author, reviewer, final approver, and super admin permissions</small>
+          <strong>Publishing access mapped</strong>
+          <small>Super Admin and assigned author access</small>
           <small>System - Today</small>
         </span>
         <span>
           <strong>Category visibility updated</strong>
           <small>Platform Updates remains visible on the public blog</small>
-          <small>Content Manager - Today</small>
+          <small>Super Admin - Today</small>
         </span>
       </div>
     </section>

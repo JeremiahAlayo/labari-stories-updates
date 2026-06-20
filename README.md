@@ -1,4 +1,4 @@
-# Labari Stories & Updates
+# Labari Blog
 
 A standalone JavaScript blog project for Labari platform news, educational guides, tutorials, announcements, and SEO-friendly articles.
 
@@ -86,9 +86,7 @@ Post shape:
   audience: "All readers",
   authorId: "labari-editorial",
   authorName: "Labari Editorial",
-  submittedBy: "Social Media Team",
-  approvalStatus: "submitted",
-  finalApprover: "Head of Social Media",
+  canPublishDirectly: true,
   socialChannel: "Website, Instagram",
   readTime: "4 min read",
   status: "published",
@@ -113,15 +111,15 @@ Current admin capabilities include:
 - Create/edit post workspace
 - Dynamic categories
 - Dynamic tags
-- Authors and contributor management
-- Role preview for Super Admin, Head of Social, Final Approver, Content Manager, Editor, Author, and Contributor
-- Review queue
-- Approval workflow board
+- Author management
+- Publishing access preview for Super Admin, Assigned Author, and Author
+- Publishing access test workspace
+- Publishing flow board
 - Published and scheduled post views
 - Media library placeholder
-- Approval comments and feedback
+- Publishing notes and feedback
 - Analytics summary placeholder
-- User roles and permissions screen
+- Access settings screen
 - Settings screen
 - Activity logs
 - Bulk post actions
@@ -133,16 +131,15 @@ Current admin capabilities include:
 - Featured image URL field
 - Scheduled publishing field
 
-Because this is still a standalone review module, the admin screens model the workflow and management structure without a production database. Production integration should connect these screens to authenticated Labari users, server-side permissions, a database, media storage, notification services, and a real analytics API.
+Because this is still a standalone review module, the admin screens model the publishing structure without a production database. Production integration should connect these screens to authenticated Labari users, server-side access controls, a database, media storage, notification services, and a real analytics API.
 
-Suggested editorial flow:
+Suggested publishing flow:
 
-1. Author or contributor creates a draft.
-2. Draft is submitted for review.
-3. Head of Social or Admin Approver approves, rejects, or requests changes.
-4. Approved content moves to final approval.
-5. Final approver publishes or schedules the post.
-6. Published posts become visible on the public blog.
+1. Author creates a draft.
+2. Super Admin can publish any post directly.
+3. Super Admin can assign direct publishing access to a trusted author.
+4. Assigned Author can publish assigned posts without seeking approval.
+5. Published posts become visible on the public blog.
 
 ## Analytics
 
@@ -194,9 +191,9 @@ Recommended next steps:
 - Connect posts to a backend or CMS
 - Add authenticated admin access
 - Connect authors to real Labari user accounts
-- Add server-side roles and permissions
+- Add server-side publishing access controls
 - Add image upload and media storage
-- Add notification delivery for review and approval events
+- Add notification delivery for publishing events
 - Add hard-delete trash and restore rules
 - Add live GA4/dashboard analytics from the production analytics source
 - Add pagination for larger post collections

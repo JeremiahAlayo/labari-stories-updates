@@ -4,8 +4,8 @@ import Footer from "@/components/Footer";
 import SiteHeader from "@/components/SiteHeader";
 
 export const metadata = {
-  title: "Roles | Labari CMS",
-  description: "Manage blog role and permission structure."
+  title: "Access Settings | Labari CMS",
+  description: "Manage blog publishing access."
 };
 
 export default function RolesPage() {
@@ -15,8 +15,8 @@ export default function RolesPage() {
       <main className="admin-shell" id="main-content">
         <AdminShell
           active="roles"
-          description="Control who can write, review, approve, publish, and manage settings."
-          title="User roles and permissions"
+          description="Keep publishing simple: Super Admins publish directly, assigned authors publish assigned posts."
+          title="Access settings"
         >
           <RolesPanel roles={roles} />
         </AdminShell>

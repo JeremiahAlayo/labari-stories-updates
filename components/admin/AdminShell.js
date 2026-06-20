@@ -7,26 +7,22 @@ export const adminMenuItems = [
   { label: "Categories", href: "/admin/categories", id: "categories" },
   { label: "Tags", href: "/admin/tags", id: "tags" },
   { label: "Authors", href: "/admin/authors", id: "authors" },
-  { label: "Review Queue", href: "/admin/review-queue", id: "review-queue" },
-  { label: "Workflow", href: "/admin/workflow", id: "workflow" },
+  { label: "Publishing Access", href: "/admin/review-queue", id: "review-queue" },
+  { label: "Publishing Flow", href: "/admin/workflow", id: "workflow" },
   { label: "Published", href: "/admin/published", id: "published" },
   { label: "Scheduled", href: "/admin/scheduled", id: "scheduled" },
   { label: "Media Library", href: "/admin/media", id: "media" },
   { label: "Feedback", href: "/admin/feedback", id: "feedback" },
   { label: "Analytics", href: "/admin/analytics", id: "analytics" },
-  { label: "Roles", href: "/admin/roles", id: "roles" },
+  { label: "Access Settings", href: "/admin/roles", id: "roles" },
   { label: "Settings", href: "/admin/settings", id: "settings" },
   { label: "Activity Logs", href: "/admin/activity", id: "activity" }
 ];
 
 export const roles = [
   "Super Admin",
-  "Head of Social",
-  "Final Approver",
-  "Content Manager",
-  "Editor",
-  "Author",
-  "Contributor"
+  "Assigned Author",
+  "Author"
 ];
 
 export default function AdminShell({

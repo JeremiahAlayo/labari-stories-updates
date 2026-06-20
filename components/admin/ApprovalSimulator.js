@@ -4,47 +4,40 @@ import { useMemo, useState } from "react";
 
 import { getPostStatus } from "@/components/admin/AdminSections";
 
-const approvalRoles = [
+const publishingRoles = [
   {
     id: "author",
     name: "Author",
-    note: "Can draft content and submit posts for review."
+    note: "Can create and save drafts until publishing access is assigned."
   },
   {
-    id: "reviewer",
-    name: "Head of Social",
-    note: "Can approve, reject, or request changes."
-  },
-  {
-    id: "final-approver",
-    name: "Final Approver",
-    note: "Can publish content after review approval."
+    id: "assigned-author",
+    name: "Assigned Author",
+    note: "Can publish posts assigned to them without seeking approval."
   },
   {
     id: "super-admin",
     name: "Super Admin",
-    note: "Can test every publishing action."
+    note: "Can publish directly and assign publishing access to authors."
   }
 ];
 
 const statusNotes = {
   draft: "The author is still preparing this post.",
-  "submitted for review": "Waiting for the Head of Social to review.",
-  "changes requested": "Returned to the author with feedback.",
-  "approved by reviewer": "Passed first review and is ready for final approval.",
+  assigned: "This post has direct publishing access assigned.",
   published: "Visible on the public blog.",
-  rejected: "Stopped by the review team."
+  archived: "Hidden from the public blog."
 };
 
-function canReview(roleId) {
-  return ["reviewer", "super-admin"].includes(roleId);
+function canAssign(roleId) {
+  return roleId === "super-admin";
 }
 
-function canPublish(roleId) {
-  return ["final-approver", "super-admin"].includes(roleId);
+function canPublish(roleId, post) {
+  return roleId === "super-admin" || (roleId === "assigned-author" && post.assigned);
 }
 
-function canSubmit(roleId) {
+function canDraft(roleId) {
   return ["author", "super-admin"].includes(roleId);
 }
 
@@ -54,6 +47,7 @@ function getSeedPost(post) {
     title: post.title,
     authorName: post.authorName,
     category: post.category,
+    assigned: Boolean(post.canPublishDirectly),
     status: getPostStatus(post),
     comments: []
   };
@@ -61,16 +55,16 @@ function getSeedPost(post) {
 
 export default function ApprovalSimulator({ posts }) {
   const seedPosts = useMemo(() => posts.slice(0, 4).map(getSeedPost), [posts]);
-  const [roleId, setRoleId] = useState("reviewer");
+  const [roleId, setRoleId] = useState("super-admin");
   const [demoPosts, setDemoPosts] = useState(seedPosts);
   const [selectedSlug, setSelectedSlug] = useState(seedPosts[0]?.slug || "");
   const [comment, setComment] = useState("");
 
   const selectedPost =
     demoPosts.find((post) => post.slug === selectedSlug) || demoPosts[0];
-  const selectedRole = approvalRoles.find((role) => role.id === roleId);
+  const selectedRole = publishingRoles.find((role) => role.id === roleId);
 
-  function updateSelected(status, fallbackComment) {
+  function updateSelected(status, fallbackComment, assigned = selectedPost.assigned) {
     const nextComment = comment.trim() || fallbackComment;
 
     setDemoPosts((currentPosts) =>
@@ -78,6 +72,7 @@ export default function ApprovalSimulator({ posts }) {
         post.slug === selectedPost.slug
           ? {
               ...post,
+              assigned,
               status,
               comments: [
                 {
@@ -102,10 +97,10 @@ export default function ApprovalSimulator({ posts }) {
     <section className="cms-panel approval-simulator">
       <div className="cms-panel-header">
         <div>
-          <h3>Approval test workspace</h3>
+          <h3>Publishing access test</h3>
           <p className="muted-copy">
-            Use sample roles to test how approval, rejection, requested changes,
-            and publishing should behave.
+            Test the simple access model: Super Admin publishes directly and can
+            assign an author to publish without approval.
           </p>
         </div>
         <button type="button" onClick={() => setDemoPosts(seedPosts)}>
@@ -118,7 +113,7 @@ export default function ApprovalSimulator({ posts }) {
           <label>
             Test as
             <select value={roleId} onChange={(event) => setRoleId(event.target.value)}>
-              {approvalRoles.map((role) => (
+              {publishingRoles.map((role) => (
                 <option key={role.id} value={role.id}>
                   {role.name}
                 </option>
@@ -137,7 +132,7 @@ export default function ApprovalSimulator({ posts }) {
               >
                 <strong>{post.title}</strong>
                 <span>{post.authorName}</span>
-                <em>{post.status}</em>
+                <em>{post.assigned ? "assigned author access" : post.status}</em>
               </button>
             ))}
           </div>
@@ -146,7 +141,7 @@ export default function ApprovalSimulator({ posts }) {
         <div className="cms-stack">
           <div>
             <span className={`status-badge status-${selectedPost.status.replaceAll(" ", "-")}`}>
-              {selectedPost.status}
+              {selectedPost.assigned ? "assigned access" : selectedPost.status}
             </span>
             <h3>{selectedPost.title}</h3>
             <p className="muted-copy">
@@ -155,9 +150,9 @@ export default function ApprovalSimulator({ posts }) {
           </div>
 
           <label>
-            Approval comment
+            Publishing note
             <textarea
-              placeholder="Add feedback for the author or publishing team..."
+              placeholder="Add an internal note for this post..."
               rows="4"
               value={comment}
               onChange={(event) => setComment(event.target.value)}
@@ -166,37 +161,30 @@ export default function ApprovalSimulator({ posts }) {
 
           <div className="approval-actions">
             <button
-              disabled={!canSubmit(roleId)}
+              disabled={!canDraft(roleId)}
               type="button"
-              onClick={() => updateSelected("submitted for review", "Submitted for review.")}
+              onClick={() => updateSelected("draft", "Saved as draft.", false)}
             >
-              Submit review
+              Save draft
             </button>
             <button
-              disabled={!canReview(roleId)}
+              disabled={!canAssign(roleId)}
               type="button"
-              onClick={() => updateSelected("approved by reviewer", "Approved for final review.")}
+              onClick={() => updateSelected("assigned", "Publishing access assigned.", true)}
             >
-              Approve
+              Assign access
             </button>
             <button
-              disabled={!canReview(roleId)}
+              disabled={!canAssign(roleId)}
               type="button"
-              onClick={() => updateSelected("changes requested", "Changes requested.")}
+              onClick={() => updateSelected("draft", "Publishing access removed.", false)}
             >
-              Request changes
+              Remove access
             </button>
             <button
-              disabled={!canReview(roleId)}
+              disabled={!canPublish(roleId, selectedPost)}
               type="button"
-              onClick={() => updateSelected("rejected", "Rejected after review.")}
-            >
-              Reject
-            </button>
-            <button
-              disabled={!canPublish(roleId)}
-              type="button"
-              onClick={() => updateSelected("published", "Published by final approver.")}
+              onClick={() => updateSelected("published", "Published directly.")}
             >
               Publish
             </button>
@@ -213,8 +201,8 @@ export default function ApprovalSimulator({ posts }) {
               ))
             ) : (
               <span>
-                <strong>No approval notes yet</strong>
-                <small>Run an action above to test the workflow.</small>
+                <strong>No publishing notes yet</strong>
+                <small>Run an action above to test publishing access.</small>
               </span>
             )}
           </div>

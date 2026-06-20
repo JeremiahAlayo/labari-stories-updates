@@ -15,7 +15,7 @@ export default function SettingsPage() {
       <main className="admin-shell" id="main-content">
         <AdminShell
           active="settings"
-          description="Configure approval rules, notifications, and publishing behavior."
+          description="Configure publishing access, notifications, and content behavior."
           title="Settings"
         >
           <SettingsPanel />

@@ -6,8 +6,8 @@ import SiteHeader from "@/components/SiteHeader";
 import { posts } from "@/data/posts";
 
 export const metadata = {
-  title: "Review Queue | Labari CMS",
-  description: "Review submitted Labari blog posts and approval status."
+  title: "Publishing Access | Labari CMS",
+  description: "Manage direct publishing access for Labari blog authors."
 };
 
 export default function ReviewQueuePage() {
@@ -17,8 +17,8 @@ export default function ReviewQueuePage() {
       <main className="admin-shell" id="main-content">
         <AdminShell
           active="review-queue"
-          description="Review submitted posts, request changes, or move content to final approval."
-          title="Review queue"
+          description="Super Admins can publish directly and assign trusted authors to publish without approval."
+          title="Publishing access"
         >
           <ApprovalSimulator posts={posts} />
           <ReviewQueue posts={posts} />

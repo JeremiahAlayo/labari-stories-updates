@@ -5,7 +5,7 @@ import SiteHeader from "@/components/SiteHeader";
 
 export const metadata = {
   title: "Feedback | Labari CMS",
-  description: "Review editorial comments and approval feedback."
+  description: "Review editorial notes and content feedback."
 };
 
 export default function FeedbackPage() {
@@ -15,7 +15,7 @@ export default function FeedbackPage() {
       <main className="admin-shell" id="main-content">
         <AdminShell
           active="feedback"
-          description="Track reviewer notes, requested changes, and approval feedback."
+          description="Track internal notes, requested edits, and content feedback."
           title="Comments and feedback"
         >
           <FeedbackPanel />

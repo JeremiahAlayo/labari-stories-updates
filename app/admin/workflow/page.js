@@ -5,8 +5,8 @@ import SiteHeader from "@/components/SiteHeader";
 import { posts } from "@/data/posts";
 
 export const metadata = {
-  title: "Workflow | Labari CMS",
-  description: "Track Labari blog content through editorial approval stages."
+  title: "Publishing Flow | Labari CMS",
+  description: "Track how Labari blog content moves from draft to publishing."
 };
 
 export default function WorkflowPage() {
@@ -16,8 +16,8 @@ export default function WorkflowPage() {
       <main className="admin-shell" id="main-content">
         <AdminShell
           active="workflow"
-          description="Follow content from draft through review, final approval, and publishing."
-          title="Approval workflow"
+          description="Follow content from draft to assigned author publishing or Super Admin publishing."
+          title="Publishing flow"
         >
           <WorkflowBoard posts={posts} />
         </AdminShell>

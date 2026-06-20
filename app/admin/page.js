@@ -6,7 +6,7 @@ import { authors } from "@/data/authors";
 import { posts } from "@/data/posts";
 
 export const metadata = {
-  title: "Editorial Workspace",
+  title: "Publishing Workspace",
   description:
     "Manage Labari blog drafts, published posts, categories, and article metadata."
 };
@@ -17,11 +17,11 @@ export default function AdminPage() {
       <SiteHeader />
       <main className="admin-shell" id="main-content">
         <section className="container admin-intro">
-          <p className="eyebrow">Editorial Workspace</p>
+          <p className="eyebrow">Publishing Workspace</p>
           <h1>Manage Labari stories and updates.</h1>
           <p>
             Create articles, assign authors, prepare social captions, submit
-            drafts for review, and track final approval before publishing.
+            drafts, and manage who can publish directly.
           </p>
         </section>
         <AdminShell

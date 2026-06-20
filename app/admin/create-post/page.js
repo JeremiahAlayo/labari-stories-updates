@@ -16,7 +16,7 @@ export default function CreatePostPage() {
       <main className="admin-shell" id="main-content">
         <AdminShell
           active="create-post"
-          description="Write the article, assign ownership, prepare SEO fields, and submit for approval."
+          description="Write the article, assign ownership, prepare SEO fields, and publish when access allows."
           title="Create post"
         >
           <PostEditor authors={authors} />
