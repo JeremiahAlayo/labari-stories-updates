@@ -154,6 +154,9 @@ export default function PackagesPage() {
             <div className="section-heading">
               <p className="eyebrow">Choose your package</p>
               <h2>Simple options for different publishing goals.</h2>
+              <p className="package-section-note">
+                Three packages are available. Compare each option below before choosing.
+              </p>
             </div>
             <div className="package-grid">
               {packages.map((item) => (

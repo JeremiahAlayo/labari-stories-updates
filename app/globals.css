@@ -720,6 +720,13 @@ h2 {
   margin-bottom: 28px;
 }
 
+.package-section-note {
+  max-width: 560px;
+  margin: 12px 0 0;
+  color: var(--color-muted);
+  line-height: 1.6;
+}
+
 .section-heading h2,
 .benefits-layout h2,
 .package-cta h2 {
@@ -781,6 +788,20 @@ h2 {
   background:
     linear-gradient(145deg, rgba(59, 130, 246, 0.18), rgba(34, 197, 94, 0.08)),
     var(--color-panel);
+}
+
+.package-card.featured::after {
+  content: "Recommended";
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.16);
+  color: #bfdbfe;
+  padding: 7px 10px;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
 .package-label {
@@ -2488,24 +2509,27 @@ h2 {
   }
 
   .package-grid {
-    display: flex;
-    gap: 12px;
-    overflow-x: auto;
-    margin: 0 -12px;
-    padding: 4px 12px 18px;
-    scroll-padding-left: 12px;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: thin;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    overflow: visible;
+    margin: 0;
+    padding: 0;
   }
 
   .package-card {
-    min-width: min(86vw, 340px);
-    scroll-snap-align: start;
+    min-width: 0;
+    min-height: auto;
     padding: 20px;
   }
 
   .package-card:hover {
     transform: none;
+  }
+
+  .package-card.featured::after {
+    top: 16px;
+    right: 16px;
   }
 
   .price-wrap strong {
