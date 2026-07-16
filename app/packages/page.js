@@ -55,6 +55,43 @@ const benefits = [
   "Create a practical path from manuscript to digital product"
 ];
 
+const processSteps = [
+  {
+    title: "Upload the manuscript",
+    text: "Start with the book file and the basic author details."
+  },
+  {
+    title: "Choose the experience",
+    text: "Select read, listen, or watch depending on how you want people to enjoy the book."
+  },
+  {
+    title: "Prepare the digital formats",
+    text: "Labari shapes the book into the selected formats and prepares it for the platform."
+  },
+  {
+    title: "Launch and share",
+    text: "Your book gets a clearer digital presence with direct ways for readers to engage."
+  }
+];
+
+const questions = [
+  {
+    question: "Which package should an author start with?",
+    answer:
+      "Read is best for a simple digital book launch. Read + Listen adds audio access. Read + Listen + Watch gives the strongest multi-format presence."
+  },
+  {
+    question: "Can a package be upgraded later?",
+    answer:
+      "Yes. The page is structured so the team can later connect upgrades, author onboarding, and package requests to the main Labari backend."
+  },
+  {
+    question: "What does Labari need from the author?",
+    answer:
+      "The manuscript, author details, preferred package, and any approved media assets needed to prepare the book experience."
+  }
+];
+
 export default function PackagesPage() {
   return (
     <>
@@ -83,6 +120,12 @@ export default function PackagesPage() {
                 Contact Labari
               </a>
             </div>
+            <nav className="mobile-package-jump" aria-label="Package page sections">
+              <a href="#packages">Packages</a>
+              <a href="#benefits">Benefits</a>
+              <a href="#process">Process</a>
+              <a href="#questions">Questions</a>
+            </nav>
           </div>
           <div className="packages-stage" aria-hidden="true">
             <div className="stage-shelf shelf-one">
@@ -138,15 +181,52 @@ export default function PackagesPage() {
           </div>
         </section>
 
-        <section className="packages-section package-benefits">
+        <section className="packages-section package-benefits" id="benefits">
           <div className="container benefits-layout">
             <div>
               <p className="eyebrow">Why Labari</p>
               <h2>More formats, more reach, one clear publishing path.</h2>
             </div>
-            <div className="benefit-grid">
+            <ul className="benefit-grid benefit-list">
               {benefits.map((benefit) => (
-                <span key={benefit}>{benefit}</span>
+                <li key={benefit}>{benefit}</li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        <section className="packages-section package-process" id="process">
+          <div className="container">
+            <div className="section-heading">
+              <p className="eyebrow">How it works</p>
+              <h2>A simple path from manuscript to digital experience.</h2>
+            </div>
+            <ol className="process-list">
+              {processSteps.map((step, index) => (
+                <li key={step.title}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <div>
+                    <h3>{step.title}</h3>
+                    <p>{step.text}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+
+        <section className="packages-section package-questions" id="questions">
+          <div className="container questions-layout">
+            <div>
+              <p className="eyebrow">Questions</p>
+              <h2>Clear answers before an author gets started.</h2>
+            </div>
+            <div className="question-list">
+              {questions.map((item) => (
+                <details key={item.question}>
+                  <summary>{item.question}</summary>
+                  <p>{item.answer}</p>
+                </details>
               ))}
             </div>
           </div>
