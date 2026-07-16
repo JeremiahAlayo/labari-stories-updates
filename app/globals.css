@@ -583,7 +583,7 @@ h2 {
 }
 
 .packages-hero h1 {
-  max-width: 780px;
+  max-width: 700px;
   animation: fade-up 560ms ease both;
 }
 
@@ -660,26 +660,26 @@ h2 {
 }
 
 .shelf-one {
-  right: 27%;
-  top: 19%;
+  right: 18%;
+  top: 13%;
   animation: float-soft 7200ms ease-in-out infinite;
 }
 
 .stage-read {
-  right: 12%;
-  top: 28%;
+  right: 4%;
+  top: 24%;
   animation: float-soft 6800ms ease-in-out 300ms infinite;
 }
 
 .stage-listen {
-  right: 31%;
-  bottom: 24%;
+  right: 24%;
+  bottom: 19%;
   animation: float-soft 7600ms ease-in-out 600ms infinite;
 }
 
 .stage-watch {
-  right: 8%;
-  bottom: 16%;
+  right: 4%;
+  bottom: 10%;
   animation: float-soft 7000ms ease-in-out 900ms infinite;
 }
 
@@ -694,15 +694,15 @@ h2 {
 
 .line-one {
   width: 360px;
-  right: 12%;
+  right: 4%;
   top: 50%;
   transform: rotate(-16deg);
 }
 
 .line-two {
   width: 290px;
-  right: 19%;
-  bottom: 32%;
+  right: 9%;
+  bottom: 29%;
   transform: rotate(13deg);
   animation-delay: 900ms;
 }

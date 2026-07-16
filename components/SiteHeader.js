@@ -23,7 +23,6 @@ export default function SiteHeader() {
             aria-hidden="true"
             priority
           />
-          <span className="brand-context">Labari Blog</span>
         </Link>
         <nav className="header-nav" aria-label="Main navigation">
           <Link href="/blog">Blog</Link>
