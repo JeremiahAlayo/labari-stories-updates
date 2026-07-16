@@ -27,6 +27,7 @@ export default function SiteHeader() {
         </Link>
         <nav className="header-nav" aria-label="Main navigation">
           <Link href="/blog">Blog</Link>
+          <Link href="/packages">Packages</Link>
           <a href="https://www.labaribooks.com/" target="_blank" rel="noreferrer">
             Home
           </a>
