@@ -21,7 +21,7 @@ export const metadata = {
 const packages = [
   {
     name: "Read",
-    price: "\u20A699,000",
+    price: "\u20A60",
     summary: "Your audience can read your book on Labari.",
     label: "Digital reading",
     features: ["Labari reading access", "Clean book presentation", "Author visibility"],
@@ -29,7 +29,7 @@ const packages = [
   },
   {
     name: "Read + Listen",
-    price: "\u20A6199,000",
+    price: "\u20A629,000",
     summary: "Your audience can read and listen to your book.",
     label: "Most popular",
     features: ["Everything in Read", "Audio-ready experience", "More flexible discovery"],
@@ -38,7 +38,7 @@ const packages = [
   },
   {
     name: "Read + Listen + Watch",
-    price: "\u20A6399,000",
+    price: "\u20A679,000",
     summary: "Your audience can read, listen to, and watch your book.",
     label: "Best value",
     features: ["Everything in Read + Listen", "Video storytelling format", "Full digital presence"],
